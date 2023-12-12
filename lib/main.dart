@@ -5,6 +5,7 @@ import 'package:shopbiz_app/credientals/signup_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 

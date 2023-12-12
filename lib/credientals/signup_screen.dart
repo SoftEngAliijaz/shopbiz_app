@@ -44,83 +44,85 @@ class _SingUpScreenState extends State<SingUpScreen> {
           width: double.infinity,
           child: Form(
             key: globalKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ///
-                Text(
-                  'WELCOME TO\nE-Commerce App\nCreate Your Account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ///
+                  Text(
+                    'WELCOME TO\nE-Commerce App\nCreate Your Account',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
 
-                ///Logo
-                CircleAvatar(
-                    radius: 100,
-                    child: Image.asset('assets/images/e_commerce_logo.png')),
+                  ///Logo
+                  CircleAvatar(
+                      radius: 100,
+                      child: Image.asset('assets/images/e_commerce_logo.png')),
 
-                ///Text fields
-                CustomTextField(
-                  textEditingController: _emailC,
-                  prefixIcon: Icons.email_outlined,
-                  hintText: 'Enter Email',
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return 'Field Should Not be Empty';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                CustomTextField(
-                  textEditingController: _passwordC,
-                  prefixIcon: Icons.password_outlined,
-                  hintText: 'Enter Password',
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return 'Field Should Not be Empty';
-                    } else if (v.length < 5) {
-                      return 'Invalid Length';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                CustomTextField(
-                  textEditingController: _rePassC,
-                  prefixIcon: Icons.password_outlined,
-                  hintText: 'Re-Enter Password',
-                  validator: (v) {
-                    if (v!.isEmpty) {
-                      return 'Field Should Not be Empty';
-                    } else if (v.length < 5) {
-                      return 'Invalid Length';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
+                  ///Text fields
+                  CustomTextField(
+                    textEditingController: _emailC,
+                    prefixIcon: Icons.email_outlined,
+                    hintText: 'Enter Email',
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return 'Field Should Not be Empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  CustomTextField(
+                    textEditingController: _passwordC,
+                    prefixIcon: Icons.password_outlined,
+                    hintText: 'Enter Password',
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return 'Field Should Not be Empty';
+                      } else if (v.length < 5) {
+                        return 'Invalid Length';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  CustomTextField(
+                    textEditingController: _rePassC,
+                    prefixIcon: Icons.password_outlined,
+                    hintText: 'Re-Enter Password',
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return 'Field Should Not be Empty';
+                      } else if (v.length < 5) {
+                        return 'Invalid Length';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
 
-                ///button
-                CustomButton(
-                  title: 'SIGNUP',
-                  onPressed: () {
-                    onSubmittion();
-                  },
-                ),
+                  ///button
+                  CustomButton(
+                    title: 'SIGNUP',
+                    onPressed: () {
+                      onSubmittion();
+                    },
+                  ),
 
-                ///
-                AccountSelection(
-                  title: 'Already have account?',
-                  buttonTitle: 'LOGIN',
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+                  ///
+                  AccountSelection(
+                    title: 'Already have account?',
+                    buttonTitle: 'LOGIN',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
