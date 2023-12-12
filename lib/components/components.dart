@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/constants/constants.dart';
 
@@ -18,7 +19,13 @@ class AppComponents {
               )),
             ),
           ),
-          _cardTileForDrawer(),
+          ListTile(
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+            },
+            leading: Icon(Icons.logout),
+            title: Text('Logout'),
+          ),
           _cardTileForDrawer(),
           _cardTileForDrawer(),
           _cardTileForDrawer(),
