@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1093917564056",
+    "project_id": "shopbiz-b0e8c",
+    "storage_bucket": "shopbiz-b0e8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093917564056:android:fd56009d64eaecab7f44ed",
+        "android_client_info": {
+          "package_name": "com.example.shopbiz_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnl34pTooydmIiL-HO1G6cLj9u2n3ZyR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
