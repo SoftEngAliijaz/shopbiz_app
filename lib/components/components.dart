@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shopbiz_app/constants/constants.dart';
 
 class AppComponents {
+  ///firebase auth instance
+  static FirebaseAuth auth = FirebaseAuth.instance;
   static Drawer drawerComponent() {
     return Drawer(
       child: Column(
@@ -19,36 +21,35 @@ class AppComponents {
               )),
             ),
           ),
-          ListTile(
-            onTap: () async {
-              await FirebaseAuth.instance.signOut();
-            },
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
-          ),
-          _cardTileForDrawer(),
-          _cardTileForDrawer(),
-          _cardTileForDrawer(),
-          _cardTileForDrawer(),
+          _listTileComponent(() {}, Icons.person_outline, 'Profile'),
+          _listTileComponent(() {}, Icons.add_outlined, 'Add Products'),
+          _listTileComponent(() {}, Icons.update_outlined, 'Update Products'),
+          _listTileComponent(() {}, Icons.delete_outline, 'Delete Products'),
+          _listTileComponent(
+              () {}, Icons.view_agenda_outlined, 'View Products'),
+          _listTileComponent(() async {
+            await auth.signOut();
+          }, Icons.logout, 'LogOut'),
         ],
       ),
     );
   }
 
-  static Card _cardTileForDrawer() {
-    return Card(
-      child: ListTile(
-        leading: Icon(Icons.abc),
-        title: Text(
-          'this is title',
-          style: AppConstants.textBold(),
+  static Widget _listTileComponent(
+    void Function()? onTap,
+    IconData leadingIcon,
+    String title,
+  ) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: onTap,
+          leading: Icon(leadingIcon),
+          title: Text(title),
+          trailing: Icon(Icons.forward_outlined),
         ),
-        subtitle: Text(
-          'this is subtitle',
-          style: AppConstants.textBold(),
-        ),
-        trailing: Icon(Icons.arrow_forward_ios_outlined),
-      ),
+        Divider(),
+      ],
     );
   }
 }

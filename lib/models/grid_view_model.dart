@@ -8,23 +8,19 @@ class GridViewModel {
 
 final List<GridViewModel> gridModel = [
   GridViewModel(
-    cardColor: Colors.amberAccent,
-    title: 'HOME SCREEN',
-  ),
-  GridViewModel(
     cardColor: Colors.red,
-    title: 'Add SCREEN',
+    title: 'Add Screen',
   ),
   GridViewModel(
     cardColor: Colors.blue,
-    title: 'Update SCREEN',
+    title: 'Update Screen',
   ),
   GridViewModel(
     cardColor: Colors.pink,
-    title: 'Delete SCREEN',
+    title: 'Delete Screen',
   ),
   GridViewModel(
     cardColor: Colors.yellow,
-    title: 'View SCREEN',
+    title: 'View Screen',
   ),
 ];

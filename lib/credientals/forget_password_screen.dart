@@ -1,11 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
+class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  ///
+  Future<void> resetPassword(BuildContext context, String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      AppConstants.showToast('Password reset email sent successfully.');
+    } catch (e) {
+      AppConstants.showToast(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ///controller
+    TextEditingController emailController = TextEditingController();
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -15,7 +36,7 @@ class ForgetPasswordScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ///
-              Text(
+              const Text(
                 'Forget Password',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -30,7 +51,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                   child: Image.asset('assets/images/e_commerce_logo.png')),
 
               ///Text fields
-              CustomTextField(
+              const CustomTextField(
                 textEditingController: null,
                 prefixIcon: Icons.email_outlined,
                 hintText: 'Enter Email',
@@ -39,7 +60,10 @@ class ForgetPasswordScreen extends StatelessWidget {
               ///button
               CustomButton(
                 title: 'Send Request',
-                onPressed: () {},
+                onPressed: () {
+                  String email = emailController.text.trim();
+                  resetPassword(context, email);
+                },
               ),
             ],
           ),

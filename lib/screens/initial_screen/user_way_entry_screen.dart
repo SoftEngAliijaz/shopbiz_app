@@ -1,6 +1,8 @@
 import 'dart:ui';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/credientals/login_screen.dart';
 import 'package:shopbiz_app/credientals/signup_screen.dart';
 
@@ -15,8 +17,8 @@ class UserWayEntryScreen extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         image: DecorationImage(
-          fit: BoxFit.fill,
-          image: AssetImage('assets/images/images (1).jpg'),
+          fit: BoxFit.cover,
+          image: CachedNetworkImageProvider(AppConstants.splashScreenBgImg),
         ),
       ),
       child: Container(
@@ -25,43 +27,65 @@ class UserWayEntryScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'CHOOSE WHAT YOU WANT TO DO?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ///logo
+              Container(
+                child: const CircleAvatar(
+                  radius: 100,
+                  backgroundImage:
+                      AssetImage('assets/images/e_commerce_logo.png'),
                 ),
               ),
+
+              ///
+              SizedBox(height: 20),
+
+              ///
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Welcome to ',
+                    style: AppConstants.animationStyle(),
+                  ),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TyperAnimatedText('Shopbiz',
+                          textStyle: AppConstants.animationStyle()),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+
+              ///
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
+                    child: MaterialButton(
+                      height: 50,
+                      shape: StadiumBorder(),
+                      color: Colors.blue,
+                      child: Center(child: Text('LOGIN')),
                       onPressed: () {
-                        Navigator.pushReplacement(context,
+                        Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) {
-                          return SingUpScreen();
-                        }));
+                          return LogInScreen();
+                        }), (route) => false);
                       },
-                      child: Text(
-                        "SIGNUP SCREEN",
-                      ),
                     ),
                   ),
                   Expanded(
-                    child: ElevatedButton(
+                    child: MaterialButton(
+                      height: 50,
+                      shape: StadiumBorder(),
+                      color: Colors.red,
+                      child: Center(child: Text('SIGNUP')),
                       onPressed: () {
-                        Navigator.pushReplacement(context,
+                        Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) {
-                          return LogInScreen();
-                        }));
+                          return SingUpScreen();
+                        }), (route) => false);
                       },
-                      child: Text(
-                        "LOGIN SCREEN",
-                      ),
                     ),
                   ),
                 ],
