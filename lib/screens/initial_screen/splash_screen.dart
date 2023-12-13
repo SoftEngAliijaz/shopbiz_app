@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
   ///
   @override
   void initState() {
-    timer = Timer.periodic(Duration(seconds: 4), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return UserWayEntryScreen();
+        return const UserWayEntryScreen();
       }));
     });
 
@@ -44,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         height: size.height,
         width: size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
             image: CachedNetworkImageProvider(AppConstants.splashScreenBgImg),
@@ -64,10 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
                         AssetImage('assets/images/e_commerce_logo.png'),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 ///title
-                Text(
+                const Text(
                   'WELCOME TO SHOPBIZ',
                   style: TextStyle(
                     fontSize: 20.0,
@@ -92,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           textStyle: AppConstants.animationStyle()),
                     ]),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 ///progress bar
                 Container(child: AppConstants.customProgressIndicator()),

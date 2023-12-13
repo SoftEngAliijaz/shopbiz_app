@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/credientals/signup_screen.dart';
-import 'package:shopbiz_app/screens/home_screen.dart';
+import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
+import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
@@ -24,7 +24,7 @@ class _LogInScreenState extends State<LogInScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       return HomeScreen();
     }));
-  }
+  } //
 
   @override
   Widget build(BuildContext context) {

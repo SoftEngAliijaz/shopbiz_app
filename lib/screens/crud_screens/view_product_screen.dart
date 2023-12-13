@@ -5,7 +5,18 @@ class ViewProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [],),
+      body: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (c, i) {
+          return Card(
+            color: Colors.red,
+            child: ListTile(
+              title: Text('product title'),
+              subtitle: Text('product subtitle'),
+            ),
+          );
+        },
+      ),
     );
   }
 }

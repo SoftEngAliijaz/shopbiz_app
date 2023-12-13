@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/credientals/login_screen.dart';
+import 'package:shopbiz_app/screens/credientals/login_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';

@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         hintText: hintText,
-        hintStyle: TextStyle(fontWeight: FontWeight.bold),
+        hintStyle: const TextStyle(fontWeight: FontWeight.bold),
         prefixIcon: Icon(prefixIcon),
       ),
     );

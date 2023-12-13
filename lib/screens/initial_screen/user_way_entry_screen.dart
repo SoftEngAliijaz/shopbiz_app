@@ -3,8 +3,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/constants/constants.dart';
-import 'package:shopbiz_app/credientals/login_screen.dart';
-import 'package:shopbiz_app/credientals/signup_screen.dart';
+import 'package:shopbiz_app/screens/credientals/login_screen.dart';
+import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
 
 class UserWayEntryScreen extends StatelessWidget {
   const UserWayEntryScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class UserWayEntryScreen extends StatelessWidget {
         body: Container(
       height: size.height,
       width: size.width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
           image: CachedNetworkImageProvider(AppConstants.splashScreenBgImg),
@@ -37,7 +37,7 @@ class UserWayEntryScreen extends StatelessWidget {
               ),
 
               ///
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               ///
               Row(
@@ -55,7 +55,7 @@ class UserWayEntryScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               ///
               Row(
@@ -63,13 +63,13 @@ class UserWayEntryScreen extends StatelessWidget {
                   Expanded(
                     child: MaterialButton(
                       height: 50,
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       color: Colors.blue,
-                      child: Center(child: Text('LOGIN')),
+                      child: const Center(child: Text('LOGIN')),
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) {
-                          return LogInScreen();
+                          return const LogInScreen();
                         }), (route) => false);
                       },
                     ),
@@ -77,13 +77,13 @@ class UserWayEntryScreen extends StatelessWidget {
                   Expanded(
                     child: MaterialButton(
                       height: 50,
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       color: Colors.red,
-                      child: Center(child: Text('SIGNUP')),
+                      child: const Center(child: Text('SIGNUP')),
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (_) {
-                          return SingUpScreen();
+                          return const SingUpScreen();
                         }), (route) => false);
                       },
                     ),

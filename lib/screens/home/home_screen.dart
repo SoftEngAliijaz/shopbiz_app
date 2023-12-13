@@ -35,9 +35,18 @@ class HomeScreen extends StatelessWidget {
                 crossAxisSpacing: 5,
               ),
               itemBuilder: (BuildContext context, int index) {
+                ///assigned
+                final value = gridModel[index].title.toString();
                 return Card(
-                  color: gridModel[index].cardColor,
-                  child: Center(child: Text(gridModel[index].title.toString())),
+                  child: Center(
+                    child: Text(
+                      ///showed
+                      value,
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),
