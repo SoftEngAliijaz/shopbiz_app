@@ -35,7 +35,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ///
+              ///ttile
               const Text(
                 'Forget Password',
                 textAlign: TextAlign.center,

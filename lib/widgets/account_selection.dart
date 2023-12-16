@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AccountSelection extends StatelessWidget {
+  ///var
   final String? title;
   final String? buttonTitle;
   final void Function()? onPressed;
 
+  ///const
   const AccountSelection({
     super.key,
     this.title,

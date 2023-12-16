@@ -114,7 +114,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     },
                   ),
 
-                  ///
+                  ///selection
                   AccountSelection(
                     title: 'Already have account?',
                     buttonTitle: 'LOGIN',

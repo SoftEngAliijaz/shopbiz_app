@@ -10,7 +10,7 @@ class CarouselSliderModel {
   });
 }
 
-///carousel slider model
+///carousel slider
 final List<CarouselSliderModel> carouselSliderModel = [
   CarouselSliderModel(
     title: 'Beauty & Products',

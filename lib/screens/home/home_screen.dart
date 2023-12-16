@@ -35,15 +35,28 @@ class HomeScreen extends StatelessWidget {
                 crossAxisSpacing: 5,
               ),
               itemBuilder: (BuildContext context, int index) {
+                /// Use modulo to cycle through colors
+                final colorValue = gridViewModelCardColors[
+                    index % gridViewModelCardColors.length];
+
                 ///assigned
                 final value = gridModel[index].title.toString();
-                return Card(
-                  child: Center(
-                    child: Text(
-                      ///showed
-                      value,
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
+
+                ///inkwell
+                return InkWell(
+                  onTap: () {
+                    navigateToScreen(context, value);
+                  },
+                  child: Card(
+                    color: colorValue,
+                    child: Center(
+                      child: Text(
+                        ///showed
+                        value,
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

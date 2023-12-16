@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
+  ///var
   final String? hintText;
   final IconData? prefixIcon;
   final TextEditingController? textEditingController;
   final String? Function(String?)? validator;
+
+  ///const
   const CustomTextField({
     super.key,
     this.hintText,

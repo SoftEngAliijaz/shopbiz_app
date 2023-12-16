@@ -14,9 +14,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  ///timer
   Timer? timer;
 
-  ///
+  ///init state
   @override
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 4), (timer) {

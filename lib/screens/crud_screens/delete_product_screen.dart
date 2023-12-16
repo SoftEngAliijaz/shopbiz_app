@@ -1,56 +1,84 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DeleteProductScreen extends StatelessWidget {
   const DeleteProductScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Delete Product'),
+        title: const Text('View Products'),
       ),
-      body: Container(
-        height: size.height,
-        width: size.width,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ListTile(
-                onTap: () {
-                  myDialogMethod(context);
-                },
-                leading: const Icon(Icons.production_quantity_limits),
-                title: const Text('Your Product Name Here'),
-                trailing: const Icon(Icons.delete_outline),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<dynamic> myDialogMethod(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Deletion'),
-        content: const Text('Are you sure you want to delete this product?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {},
-            child: const Text('Delete'),
-          ),
-        ],
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.none ||
+              snapshot.connectionState == ConnectionState.none) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final v = snapshot.data!.docs[index];
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListTile(
+                        leading:
+                            CircleAvatar(child: Center(child: Text(v['id']))),
+                        title: Text(v['name']),
+                        subtitle: Text(v['description']),
+                        trailing: IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: Text('Are You Sure?'),
+                                    content:
+                                        Text('You Want to Delete this Product'),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          "No",
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          await FirebaseFirestore.instance
+                                              .collection('products')
+                                              .doc(v.id)
+                                              .delete()
+                                              .whenComplete(
+                                                  () => Navigator.pop(context));
+                                        },
+                                        child: Text(
+                                          "Yes",
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                });
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
