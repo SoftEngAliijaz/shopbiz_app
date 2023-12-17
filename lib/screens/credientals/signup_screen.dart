@@ -22,17 +22,32 @@ class _SingUpScreenState extends State<SingUpScreen> {
   ///key
   var globalKey = GlobalKey<FormState>();
 
-  ///function
+// Signup Screen
   onSubmittion() async {
     if (globalKey.currentState!.validate()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailC.text, password: _passwordC.text);
       if (_passwordC.text != _rePassC.text) {
-        return Fluttertoast.showToast(msg: "Password Did not Matched!");
+        Fluttertoast.showToast(msg: "Password did not match!");
+        return;
       }
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return LogInScreen();
-      }));
+
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailC.text, password: _passwordC.text);
+        // Successfully signed up, navigate to login or home screen or perform additional actions
+        Navigator.push(context, MaterialPageRoute(builder: (_) {
+          return LogInScreen();
+        }));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          Fluttertoast.showToast(
+              msg: 'Email is already in use. Please sign in.');
+        } else {
+          Fluttertoast.showToast(msg: 'Error: ${e.message}');
+        }
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'Error: ${e.toString()}');
+      }
     }
   }
 

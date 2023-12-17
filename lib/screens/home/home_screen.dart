@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/components/carousel_slider.dart';
-import 'package:shopbiz_app/components/components.dart';
+import 'package:shopbiz_app/components/carousel_slider_component.dart';
+import 'package:shopbiz_app/components/drawer_component.dart';
 import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/models/grid_view_model.dart';
 
@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
       ),
 
       ///custom Drawer
-      drawer: AppComponents.drawerComponent(),
+      drawer: Components.drawerComponent(),
 
       ///body
       body: Column(

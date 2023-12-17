@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
@@ -19,13 +20,32 @@ class _LogInScreenState extends State<LogInScreen> {
   var globalKey = GlobalKey<FormState>();
 
   ///onsub fform
+
   onSub() async {
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailC.text, password: _passwordC.text);
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return HomeScreen();
-    }));
-  } //
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailC.text, password: _passwordC.text);
+      // Successfully signed in, you can access user information using userCredential.user
+      Navigator.push(context, MaterialPageRoute(builder: (_) {
+        return HomeScreen();
+      }));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        // Handle the case where user doesn't exist
+        Fluttertoast.showToast(msg: 'User does not exist. Please sign up.');
+      } else if (e.code == 'wrong-password') {
+        // Handle the case where the password is incorrect
+        Fluttertoast.showToast(msg: 'Incorrect password. Please try again.');
+      } else {
+        // Handle other exceptions
+        Fluttertoast.showToast(msg: 'Error: ${e.message}');
+      }
+    } catch (e) {
+      // Handle other exceptions
+      Fluttertoast.showToast(msg: 'Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +60,7 @@ class _LogInScreenState extends State<LogInScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ///
-                Text(
+                const Text(
                   'WELCOME TO\nE-Commerce App',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -95,7 +115,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   buttonTitle: 'CREATE ACCOUNT',
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return SingUpScreen();
+                      return const SingUpScreen();
                     }));
                   },
                 ),

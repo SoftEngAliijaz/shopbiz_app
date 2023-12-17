@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/constants/constants.dart';
 
-class AppComponents {
+class Components {
   ///firebase auth instance
-  static FirebaseAuth auth = FirebaseAuth.instance;
   static Drawer drawerComponent() {
     return Drawer(
       child: Column(
@@ -28,7 +27,7 @@ class AppComponents {
           _listTileComponent(
               () {}, Icons.view_agenda_outlined, 'View Products'),
           _listTileComponent(() async {
-            await auth.signOut();
+            await FirebaseAuth.instance.signOut();
           }, Icons.logout, 'LogOut'),
         ],
       ),

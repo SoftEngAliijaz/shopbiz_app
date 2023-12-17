@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/models/carousel_slider_model.dart';
 
+///CarouselSlider
 CarouselSlider carouselSliderMethod() {
   return CarouselSlider(
     items: carouselSliderModel.map((carouselModelValue) {
