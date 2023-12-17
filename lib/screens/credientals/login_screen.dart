@@ -27,9 +27,13 @@ class _LogInScreenState extends State<LogInScreen> {
           .signInWithEmailAndPassword(
               email: _emailC.text, password: _passwordC.text);
       // Successfully signed in, you can access user information using userCredential.user
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return HomeScreen();
-      }));
+      // ignore: unnecessary_null_comparison
+      userCredential != null
+          // ignore: use_build_context_synchronously
+          ? Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return const HomeScreen();
+            }))
+          : null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         // Handle the case where user doesn't exist

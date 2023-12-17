@@ -35,9 +35,13 @@ class _SingUpScreenState extends State<SingUpScreen> {
             .createUserWithEmailAndPassword(
                 email: _emailC.text, password: _passwordC.text);
         // Successfully signed up, navigate to login or home screen or perform additional actions
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return LogInScreen();
-        }));
+        // ignore: unnecessary_null_comparison
+        userCredential != null
+            // ignore: use_build_context_synchronously
+            ? Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return const LogInScreen();
+              }))
+            : null;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
           Fluttertoast.showToast(
