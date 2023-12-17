@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-class AppConstants {
+class AppUtils {
   ///bold text method
   static TextStyle textBold() => const TextStyle(fontWeight: FontWeight.bold);
-
-  ///flutter toast met
-  static void showToast(String msg) {
-    Fluttertoast.showToast(msg: msg);
-  }
 
   ///splash screen bg img
   static const String splashScreenBgImg =

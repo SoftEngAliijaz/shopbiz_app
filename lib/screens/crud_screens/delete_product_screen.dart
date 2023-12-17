@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DeleteProductScreen extends StatelessWidget {
   const DeleteProductScreen({Key? key}) : super(key: key);
@@ -54,7 +55,10 @@ class DeleteProductScreen extends StatelessWidget {
                                               .doc(v.id)
                                               .delete()
                                               .whenComplete(
-                                                  () => Navigator.pop(context));
+                                                  () => Navigator.pop(context))
+                                              .then((value) =>
+                                                  Fluttertoast.showToast(
+                                                      msg: 'Deleted'));
                                         },
                                         child: Text(
                                           "Yes",

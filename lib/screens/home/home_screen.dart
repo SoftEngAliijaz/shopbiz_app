@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'E-Commerce',
-          style: AppConstants.textBold(),
+          style: AppUtils.textBold(),
         ),
       ),
 

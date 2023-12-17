@@ -1,3 +1,1 @@
-class UserModel {
-  ///
-}
+class UserModel {}

@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/screens/credientals/login_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
-import 'package:shopbiz_app/constants/constants.dart';
 
 class SingUpScreen extends StatefulWidget {
   const SingUpScreen({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailC.text, password: _passwordC.text);
       if (_passwordC.text != _rePassC.text) {
-        return AppConstants.showToast("Password Did not Matched!");
+        return Fluttertoast.showToast(msg: "Password Did not Matched!");
       }
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return LogInScreen();

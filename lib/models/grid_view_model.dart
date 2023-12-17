@@ -29,20 +29,19 @@ List<Color> gridViewModelCardColors = [
 ];
 
 // navigating through out
-
 navigateToScreen(BuildContext context, String screenTitle) {
   if (screenTitle == 'Add Screen') {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddProductScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddProductScreen()));
   } else if (screenTitle == 'Update Screen') {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => UpdateProductScreen()));
+        MaterialPageRoute(builder: (context) => const UpdateProductScreen()));
   } else if (screenTitle == 'Delete Screen') {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => DeleteProductScreen()));
+        MaterialPageRoute(builder: (context) => const DeleteProductScreen()));
   } else {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ViewProductScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const ViewProductScreen()));
   }
 }
 

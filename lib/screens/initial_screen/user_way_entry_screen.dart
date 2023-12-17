@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class UserWayEntryScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(AppConstants.splashScreenBgImg),
+          image: CachedNetworkImageProvider(AppUtils.splashScreenBgImg),
         ),
       ),
       child: Container(
@@ -45,12 +46,12 @@ class UserWayEntryScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Welcome to ',
-                    style: AppConstants.animationStyle(),
+                    style: AppUtils.animationStyle(),
                   ),
                   AnimatedTextKit(
                     animatedTexts: [
                       TyperAnimatedText('Shopbiz',
-                          textStyle: AppConstants.animationStyle()),
+                          textStyle: AppUtils.animationStyle()),
                     ],
                   ),
                 ],

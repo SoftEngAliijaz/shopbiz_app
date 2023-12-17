@@ -1,7 +1,8 @@
 import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/constants/constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
@@ -40,30 +41,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Future<void> addProducts() async {
     try {
       if (globalkey.currentState!.validate()) {
-        await FirebaseFirestore.instance
-            .collection('products')
-            .doc()
-            .set({
-              'id': _idController.text,
-              'name': _nameController.text,
-              'description': _descriptionController.text,
-              'price': _priceController.text,
-            })
-            .whenComplete(
-                () => AppConstants.showToast('Products Added Successfully'))
-            .whenComplete(
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) {
-                    return HomeScreen();
-                  },
-                ),
-              ),
-            );
+        await FirebaseFirestore.instance.collection('products').doc().set({
+          'id': _idController.text,
+          'name': _nameController.text,
+          'description': _descriptionController.text,
+          'price': _priceController.text,
+        }).then((_) {
+          Fluttertoast.showToast(msg: 'Product Added Successfully');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const HomeScreen(),
+            ),
+          );
+        }).catchError((e) {
+          Fluttertoast.showToast(msg: e.toString());
+        });
       }
     } catch (e) {
-      AppConstants.showToast(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 

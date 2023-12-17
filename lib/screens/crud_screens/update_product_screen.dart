@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/constants/constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
@@ -35,35 +35,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   var globalkey = GlobalKey<FormState>();
 
   ///add Products Function
-  Future<void> updateProducts() async {
-    try {
-      if (globalkey.currentState!.validate()) {
-        await FirebaseFirestore.instance
-            .collection('products')
-            .doc(widget.getId)
-            .update({
-              'id': _idController.text,
-              'name': _nameController.text,
-              'description': _descriptionController.text,
-              'price': _priceController.text,
-            })
-            .whenComplete(
-                () => AppConstants.showToast('Products Updated Successfully'))
-            .whenComplete(
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) {
-                    return HomeScreen();
-                  },
-                ),
-              ),
-            );
-      }
-    } catch (e) {
-      AppConstants.showToast(e.toString());
-    }
-  }
+  Future<void> updateProducts() async {}
 
   @override
   void dispose() {
@@ -160,7 +132,32 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                         CustomButton(
                           title: 'Update Product',
                           onPressed: () async {
-                            await updateProducts();
+                            try {
+                              if (globalkey.currentState!.validate()) {
+                                await FirebaseFirestore.instance
+                                    .collection('products')
+                                    .doc(widget.getId)
+                                    .update({
+                                  'id': widget.getId,
+                                  'name': widget.getName,
+                                  'description': widget.getDescription,
+                                  'price': widget.getPrice,
+                                }).then((_) {
+                                  Fluttertoast.showToast(
+                                      msg: 'Product Updated Successfully');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const HomeScreen(),
+                                    ),
+                                  );
+                                }).catchError((e) {
+                                  Fluttertoast.showToast(msg: e.toString());
+                                });
+                              }
+                            } catch (e) {
+                              Fluttertoast.showToast(msg: e.toString());
+                            }
                           },
                         ),
                       ],

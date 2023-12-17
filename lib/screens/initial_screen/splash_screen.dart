@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(AppConstants.splashScreenBgImg),
+            image: CachedNetworkImageProvider(AppUtils.splashScreenBgImg),
           ),
         ),
         child: Center(
@@ -82,20 +82,20 @@ class _SplashScreenState extends State<SplashScreen> {
                     animatedTexts: [
                       TyperAnimatedText('Buy Anything you want',
                           textAlign: TextAlign.center,
-                          textStyle: AppConstants.animationStyle()),
+                          textStyle: AppUtils.animationStyle()),
                       TyperAnimatedText('Just in 1 click',
                           textAlign: TextAlign.center,
-                          textStyle: AppConstants.animationStyle()),
+                          textStyle: AppUtils.animationStyle()),
                       TyperAnimatedText(
                           'We Deliver Your products at your door step',
                           textAlign: TextAlign.center,
-                          textStyle: AppConstants.animationStyle()),
+                          textStyle: AppUtils.animationStyle()),
                     ]),
 
                 const SizedBox(height: 20),
 
                 ///progress bar
-                Container(child: AppConstants.customProgressIndicator()),
+                Container(child: AppUtils.customProgressIndicator()),
               ],
             ),
           ),

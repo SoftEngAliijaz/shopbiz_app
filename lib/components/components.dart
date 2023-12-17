@@ -17,7 +17,7 @@ class AppComponents {
               child: Center(
                   child: Text(
                 'WELCOME TO E-Commerce',
-                style: AppConstants.textBold(),
+                style: AppUtils.textBold(),
               )),
             ),
           ),

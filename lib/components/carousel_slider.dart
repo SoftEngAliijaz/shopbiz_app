@@ -1,19 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/models/carousel_slider_model.dart';
 
 CarouselSlider carouselSliderMethod() {
   return CarouselSlider(
-    items: carouselSliderModel.map((e) {
+    items: carouselSliderModel.map((carouselModelValue) {
       return Card(
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: NetworkImage(
-                e.imageUrl.toString(),
-              ),
+              image: CachedNetworkImageProvider(
+                  carouselModelValue.imageUrl.toString()),
             ),
           ),
           child: Align(
@@ -24,7 +24,7 @@ CarouselSlider carouselSliderMethod() {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      e.title.toString(),
+                      carouselModelValue.title.toString(),
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),

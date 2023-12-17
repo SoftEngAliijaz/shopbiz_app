@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/constants/constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
 
@@ -16,9 +16,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   Future<void> resetPassword(BuildContext context, String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      AppConstants.showToast('Password reset email sent successfully.');
+      Fluttertoast.showToast(msg: 'Password reset email sent successfully.');
     } catch (e) {
-      AppConstants.showToast(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 
