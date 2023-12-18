@@ -32,40 +32,43 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ///ttile
-              const Text(
-                'Forget Password',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ///ttile
+                const Text(
+                  'Forget Password',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
 
-              ///Logo
-              CircleAvatar(
-                  radius: 100,
-                  child: Image.asset('assets/images/e_commerce_logo.png')),
+                ///Logo
+                CircleAvatar(
+                    radius: 100,
+                    child: Image.asset('assets/images/e_commerce_logo.png')),
 
-              ///Text fields
-              const CustomTextField(
-                textEditingController: null,
-                prefixIcon: Icons.email_outlined,
-                hintText: 'Enter Email',
-              ),
+                ///Text fields
+                const CustomTextField(
+                  textEditingController: null,
+                  prefixIcon: Icons.email_outlined,
+                  hintText: 'Enter Email',
+                ),
 
-              ///button
-              CustomButton(
-                title: 'Send Request',
-                onPressed: () {
-                  String email = emailController.text.trim();
-                  resetPassword(context, email);
-                },
-              ),
-            ],
+                ///button
+                CustomButton(
+                  title: 'Send Request',
+                  onPressed: () {
+                    String email = emailController.text.trim();
+                    resetPassword(context, email);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

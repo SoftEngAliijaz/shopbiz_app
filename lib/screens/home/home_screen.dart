@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
       ),
 
       ///custom Drawer
-      drawer: Components.drawerComponent(),
+      drawer: Components.drawerComponent(context),
 
       ///body
       body: Column(

@@ -25,7 +25,6 @@ class _SplashScreenState extends State<SplashScreen> {
         return const UserWayEntryScreen();
       }));
     });
-
     super.initState();
   }
 

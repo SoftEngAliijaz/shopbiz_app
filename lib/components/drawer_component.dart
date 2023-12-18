@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/constants/constants.dart';
+import 'package:shopbiz_app/screens/credientals/login_screen.dart';
+import 'package:shopbiz_app/screens/home/user_screens/profile_screen.dart';
 
 class Components {
   ///firebase auth instance
-  static Drawer drawerComponent() {
+  static Drawer drawerComponent(BuildContext context) {
     return Drawer(
       child: Column(
         children: [
@@ -20,14 +22,25 @@ class Components {
               )),
             ),
           ),
-          _listTileComponent(() {}, Icons.person_outline, 'Profile'),
-          _listTileComponent(() {}, Icons.add_outlined, 'Add Products'),
-          _listTileComponent(() {}, Icons.update_outlined, 'Update Products'),
-          _listTileComponent(() {}, Icons.delete_outline, 'Delete Products'),
+          _listTileComponent(context, () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return ProfileScreen();
+            }));
+          }, Icons.person_outline, 'Profile'),
           _listTileComponent(
-              () {}, Icons.view_agenda_outlined, 'View Products'),
-          _listTileComponent(() async {
+              context, () {}, Icons.add_outlined, 'Add Products'),
+          _listTileComponent(
+              context, () {}, Icons.update_outlined, 'Update Products'),
+          _listTileComponent(
+              context, () {}, Icons.delete_outline, 'Delete Products'),
+          _listTileComponent(
+              context, () {}, Icons.view_agenda_outlined, 'View Products'),
+          _listTileComponent(context, () async {
             await FirebaseAuth.instance.signOut();
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (_) {
+              return LogInScreen();
+            }), (route) => false);
           }, Icons.logout, 'LogOut'),
         ],
       ),
@@ -35,6 +48,7 @@ class Components {
   }
 
   static Widget _listTileComponent(
+    BuildContext context,
     void Function()? onTap,
     IconData leadingIcon,
     String title,
