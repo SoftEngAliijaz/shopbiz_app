@@ -23,6 +23,7 @@ class ViewProductScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final v = snapshot.data!.docs[index];
                   return InkWell(
+                    ///onlong press to update
                     onLongPress: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) {
                         return UpdateProductScreen(
@@ -32,6 +33,9 @@ class ViewProductScreen extends StatelessWidget {
                           getPrice: v['price'],
                         );
                       }));
+                    },
+                    onTap: () {
+                      ///will navigate to products overview/details screen
                     },
                     child: Card(
                       child: Padding(

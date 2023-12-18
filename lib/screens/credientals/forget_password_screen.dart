@@ -12,62 +12,76 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  ///
+  final TextEditingController emailController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
   Future<void> resetPassword(BuildContext context, String email) async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       Fluttertoast.showToast(msg: 'Password reset email sent successfully.');
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    ///controller
-    TextEditingController emailController = TextEditingController();
-
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ///ttile
-                const Text(
-                  'Forget Password',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text(
+                    'Forget Password',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-
-                ///Logo
-                CircleAvatar(
+                  CircleAvatar(
                     radius: 100,
-                    child: Image.asset('assets/images/e_commerce_logo.png')),
-
-                ///Text fields
-                const CustomTextField(
-                  textEditingController: null,
-                  prefixIcon: Icons.email_outlined,
-                  hintText: 'Enter Email',
-                ),
-
-                ///button
-                CustomButton(
-                  title: 'Send Request',
-                  onPressed: () {
-                    String email = emailController.text.trim();
-                    resetPassword(context, email);
-                  },
-                ),
-              ],
+                    child: Image.asset('assets/images/e_commerce_logo.png'),
+                  ),
+                  CustomTextField(
+                    textEditingController: emailController,
+                    prefixIcon: Icons.email_outlined,
+                    hintText: 'Enter Email',
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                  ),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : CustomButton(
+                          title: 'Send Request',
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              String email = emailController.text.trim();
+                              resetPassword(context, email);
+                            }
+                          },
+                        ),
+                ],
+              ),
             ),
           ),
         ),

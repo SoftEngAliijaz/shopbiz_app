@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/screens/credientals/forget_password_screen.dart';
 import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
@@ -19,57 +18,51 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _emailC = TextEditingController();
   final TextEditingController _passwordC = TextEditingController();
-  var globalKey = GlobalKey<FormState>();
-  bool? isObsecureText = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isObscureText = true;
+  bool _isLoading = false;
 
-  ///onsub fform
+  Future<void> _loginCredentials() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
 
-  loginCredientals() async {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _emailC.text, password: _passwordC.text);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _emailC.text, password: _passwordC.text);
 
-      if (userCredential.user != null) {
-        //1. Retrieve user data from Firestore
-        /* 
-         DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .get();
-*/
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .get();
+        if (userCredential.user != null) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .get();
 
-        /*
-         if (userSnapshot.exists) {
-         //   User data exists, you can extract and use it
-           var userData = userSnapshot.data()!;
-           // Update your UserModel with the retrieved data
-           userSnapshot.get(userData);
-         }
-
-         2. Update user token or session (placeholder, implement your logic)
-         updateToken(userCredential.user!.uid);
-*/
-        // 3. Navigate to Home Screen
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return const HomeScreen();
-        }));
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
+            return const HomeScreen();
+          }));
+        }
+      } on FirebaseAuthException catch (e) {
+        _showErrorSnackBar(e.message ?? 'An error occurred');
+      } catch (e) {
+        _showErrorSnackBar('An error occurred');
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        Fluttertoast.showToast(msg: 'User does not exist. Please sign up.');
-      } else if (e.code == 'wrong-password') {
-        Fluttertoast.showToast(msg: 'Incorrect password. Please try again.');
-      } else {
-        Fluttertoast.showToast(msg: 'Error: ${e.message}');
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'Error: $e');
     }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -87,103 +80,103 @@ class _LogInScreenState extends State<LogInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Form(
-                    key: globalKey,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        height: size.height * 0.90,
-                        width: size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ///
-                            const Text(
-                              'WELCOME TO\nE-Commerce App',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    key: _formKey,
+                    child: Container(
+                      height: size.height * 0.90,
+                      width: size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            'WELCOME TO\nE-Commerce App',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
                             ),
-
-                            ///Logo
-                            CircleAvatar(
-                                radius: 100,
-                                child: Image.asset(
-                                    'assets/images/e_commerce_logo.png')),
-
-                            ///Text fields
-                            CustomTextField(
-                              textEditingController: _emailC,
-                              prefixIcon: Icons.email_outlined,
-                              hintText: 'Enter Email',
-                              validator: (v) {
-                                if (v!.isEmpty) {
-                                  return 'Field Should Not be Empty';
-                                } else {
-                                  return null;
-                                }
-                              },
+                          ),
+                          CircleAvatar(
+                            radius: 100,
+                            child: Image.asset(
+                              'assets/images/e_commerce_logo.png',
                             ),
-                            CustomTextField(
-                              textEditingController: _passwordC,
-                              prefixIcon: Icons.password_outlined,
-                              obscureText: isObsecureText,
-                              hintText: 'Enter Password',
-                              validator: (v) {
-                                if (v!.isEmpty) {
-                                  return 'Field Should Not be Empty';
-                                } else if (v.length < 5) {
-                                  return 'Invalid Length';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              suffixWidget: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isObsecureText = !isObsecureText!;
-                                  });
-                                },
-                                icon: Icon(
-                                  isObsecureText == false
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                ),
-                              ),
-                            ),
-
-                            ///button
-                            CustomButton(
-                              title: 'LOGIN',
+                          ),
+                          CustomTextField(
+                            textEditingController: _emailC,
+                            prefixIcon: Icons.email_outlined,
+                            hintText: 'Enter Email',
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return 'Email should not be empty';
+                              } else if (!RegExp(
+                                      r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                                  .hasMatch(v)) {
+                                return 'Enter a valid email address';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            textEditingController: _passwordC,
+                            prefixIcon: Icons.password_outlined,
+                            obscureText: _isObscureText,
+                            hintText: 'Enter Password',
+                            validator: (v) {
+                              if (v!.isEmpty) {
+                                return 'Password should not be empty';
+                              } else if (v.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
+                            suffixWidget: IconButton(
                               onPressed: () {
-                                loginCredientals();
+                                setState(() {
+                                  _isObscureText = !_isObscureText;
+                                });
                               },
+                              icon: Icon(
+                                _isObscureText
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
                             ),
-
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton(
+                          ),
+                          _isLoading
+                              ? const CircularProgressIndicator()
+                              : CustomButton(
+                                  title: 'LOGIN',
                                   onPressed: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (_) {
-                                      return ForgetPasswordScreen();
-                                    }));
+                                    _loginCredentials();
                                   },
-                                  child: Text('Forget Password')),
-                            ),
-
-                            AccountSelection(
-                              title: "Don't have Account?",
-                              buttonTitle: 'CREATE ACCOUNT',
+                                ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: TextButton(
                               onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) {
-                                  return const SingUpScreen();
-                                }));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) {
+                                    return const ForgetPasswordScreen();
+                                  }),
+                                );
                               },
+                              child: const Text('Forgot Password?'),
                             ),
-                          ],
-                        ),
+                          ),
+                          AccountSelection(
+                            title: "Don't have an Account?",
+                            buttonTitle: 'CREATE ACCOUNT',
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) {
+                                  return const SignUpScreen();
+                                }),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),

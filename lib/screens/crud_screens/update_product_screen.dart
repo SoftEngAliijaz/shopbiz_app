@@ -62,7 +62,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             child: Form(
               key: globalkey,
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: size.height * 0.80,
                   width: size.width,
                   child: Padding(
@@ -71,8 +71,8 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ///logo
-                        Container(
-                          child: const CircleAvatar(
+                        const SizedBox(
+                          child: CircleAvatar(
                             radius: 100,
                             backgroundImage:
                                 AssetImage('assets/images/e_commerce_logo.png'),

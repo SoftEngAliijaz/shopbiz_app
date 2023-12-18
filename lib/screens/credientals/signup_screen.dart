@@ -2,37 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shopbiz_app/models/user_model.dart';
+import 'package:shopbiz_app/models/auth_model/user_model.dart';
 import 'package:shopbiz_app/screens/credientals/login_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
 
-class SingUpScreen extends StatefulWidget {
-  const SingUpScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<SingUpScreen> createState() => _SingUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SingUpScreenState extends State<SingUpScreen> {
-  ///controllers
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameC = TextEditingController();
   final TextEditingController _emailC = TextEditingController();
   final TextEditingController _passwordC = TextEditingController();
   final TextEditingController _rePassC = TextEditingController();
-  bool isObsecureText1 = false;
-  bool isObsecureText2 = false;
+  bool _isObscureText = true; // Use one variable for obscuring text
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  ///key
-  var globalKey = GlobalKey<FormState>();
-
-// Signup Screen
-  signUpCredientals() async {
-    if (globalKey.currentState!.validate()) {
+  Future<void> _signUpCredentials() async {
+    if (_formKey.currentState!.validate()) {
       if (_passwordC.text != _rePassC.text) {
-        Fluttertoast.showToast(msg: "Password did not match!");
-        return null;
+        Fluttertoast.showToast(msg: "Passwords do not match!");
+        return;
       }
 
       try {
@@ -47,19 +42,16 @@ class _SingUpScreenState extends State<SingUpScreen> {
             displayName: _nameC.text,
           );
 
-          // Successfully signed up, save user data to Firestore
-          FirebaseFirestore.instance
+          await FirebaseFirestore.instance
               .collection('users')
               .doc(userModel.uid)
               .set(userModel.toMap());
 
-          // Navigate to login screen
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
             return const LogInScreen();
           }));
         }
       } on FirebaseAuthException catch (e) {
-        // Handle Firebase Authentication exceptions
         if (e.code == 'email-already-in-use') {
           Fluttertoast.showToast(
               msg: 'Email is already in use. Please sign in.');
@@ -67,7 +59,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
           Fluttertoast.showToast(msg: 'Error: ${e.message}');
         }
       } catch (e) {
-        // Handle other exceptions
         Fluttertoast.showToast(msg: 'Error: ${e.toString()}');
       }
     }
@@ -88,7 +79,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Form(
-                    key: globalKey,
+                    key: _formKey,
                     child: SingleChildScrollView(
                       child: Container(
                         height: size.height * 0.99,
@@ -96,7 +87,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ///
                             Text(
                               'WELCOME TO\nE-Commerce App\nCreate Your Account',
                               textAlign: TextAlign.center,
@@ -105,15 +95,12 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-
-                            ///Logo
                             CircleAvatar(
-                                radius: 100,
-                                child: Image.asset(
-                                    'assets/images/e_commerce_logo.png')),
-
-                            ///Text fields
-
+                              radius: 100,
+                              child: Image.asset(
+                                'assets/images/e_commerce_logo.png',
+                              ),
+                            ),
                             CustomTextField(
                               textEditingController: _nameC,
                               prefixIcon: Icons.person_outline,
@@ -121,9 +108,8 @@ class _SingUpScreenState extends State<SingUpScreen> {
                               validator: (v) {
                                 if (v!.isEmpty) {
                                   return 'Field Should Not be Empty';
-                                } else {
-                                  return null;
                                 }
+                                return null;
                               },
                             ),
                             CustomTextField(
@@ -133,79 +119,74 @@ class _SingUpScreenState extends State<SingUpScreen> {
                               validator: (v) {
                                 if (v!.isEmpty) {
                                   return 'Field Should Not be Empty';
-                                } else {
-                                  return null;
+                                } else if (!RegExp(
+                                        r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                                    .hasMatch(v)) {
+                                  return 'Enter a valid email address';
                                 }
+                                return null;
                               },
                             ),
                             CustomTextField(
                               textEditingController: _passwordC,
                               prefixIcon: Icons.password_outlined,
-                              obscureText: isObsecureText1,
+                              obscureText: _isObscureText,
                               hintText: 'Enter Password',
                               validator: (v) {
                                 if (v!.isEmpty) {
                                   return 'Field Should Not be Empty';
                                 } else if (v.length < 5) {
                                   return 'Invalid Length';
-                                } else {
-                                  return null;
                                 }
+                                return null;
                               },
                               suffixWidget: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    isObsecureText1 =
-                                        !isObsecureText1; // Use assignment operator here
+                                    _isObscureText = !_isObscureText;
                                   });
                                 },
                                 icon: Icon(
-                                  isObsecureText1 == false
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
+                                  _isObscureText
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
                                 ),
                               ),
                             ),
                             CustomTextField(
                               textEditingController: _rePassC,
                               prefixIcon: Icons.password_outlined,
-                              obscureText: isObsecureText1,
+                              obscureText: _isObscureText,
                               hintText: 'Re-Enter Password',
                               validator: (v) {
                                 if (v!.isEmpty) {
                                   return 'Field Should Not be Empty';
                                 } else if (v.length < 5) {
                                   return 'Invalid Length';
-                                } else {
-                                  return null;
                                 }
+                                return null;
                               },
                               suffixWidget: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    isObsecureText2 =
-                                        !isObsecureText2; // Use assignment operator here
+                                    _isObscureText = !_isObscureText;
                                   });
                                 },
                                 icon: Icon(
-                                  isObsecureText2 == false
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
+                                  _isObscureText
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
                                 ),
                               ),
                             ),
-
-                            ///button
                             CustomButton(
-                              title: 'SIGNUP',
+                              title: 'SIGN UP',
                               onPressed: () {
-                                signUpCredientals();
+                                _signUpCredentials();
                               },
                             ),
-
-                            ///selection
                             AccountSelection(
-                              title: 'Already have account?',
+                              title: 'Already have an account?',
                               buttonTitle: 'LOGIN',
                               onPressed: () {
                                 Navigator.pop(context);

@@ -58,7 +58,8 @@ class DeleteProductScreen extends StatelessWidget {
                                                   () => Navigator.pop(context))
                                               .then((value) =>
                                                   Fluttertoast.showToast(
-                                                      msg: 'Deleted'));
+                                                      msg:
+                                                          'Deleted ${v['name']}'));
                                         },
                                         child: Text(
                                           "Yes",

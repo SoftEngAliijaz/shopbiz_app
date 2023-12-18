@@ -20,8 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
   ///init state
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      await Navigator.push(context, MaterialPageRoute(builder: (_) {
         return const UserWayEntryScreen();
       }));
     });

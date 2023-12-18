@@ -20,31 +20,33 @@ final List<GridViewModel> gridModel = [
   GridViewModel(title: 'View Screen'),
 ];
 
+class GridViewModelColors {
 // list of colors
-List<Color> gridViewModelCardColors = [
-  Colors.red,
-  Colors.blue,
-  Colors.pink,
-  Colors.yellow,
-];
-
-// navigating through out
-navigateToScreen(BuildContext context, String screenTitle) {
-  if (screenTitle == 'Add Screen') {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AddProductScreen()));
-  } else if (screenTitle == 'Update Screen') {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const UpdateProductScreen()));
-  } else if (screenTitle == 'Delete Screen') {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const DeleteProductScreen()));
-  } else {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const ViewProductScreen()));
-  }
+  static List<Color> gridViewModelCardColors = [
+    Colors.red,
+    Colors.blue,
+    Colors.pink,
+    Colors.yellow,
+  ];
 }
 
+class GridViewRoutes {
+// navigating through out
+  static navigateToScreen(BuildContext context, String screenTitle) {
+    if (screenTitle == 'Add Screen') {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AddProductScreen()));
+    } else if (screenTitle == 'Update Screen') {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const UpdateProductScreen()));
+    } else if (screenTitle == 'Delete Screen') {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const DeleteProductScreen()));
+    } else {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ViewProductScreen()));
+    }
+  }
 
 /*
 void _navigateToScreen(BuildContext context, String screenTitle) {
@@ -70,3 +72,4 @@ void _navigateToScreen(BuildContext context, String screenTitle) {
   }
 }
  */
+}
