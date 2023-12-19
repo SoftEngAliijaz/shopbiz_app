@@ -22,7 +22,14 @@ class MyApp extends StatelessWidget {
 
       ///theme
       theme: ThemeData(
+        ///
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+
+        ///
+        cardTheme: const CardTheme(color: Colors.white),
+
+        ///
+        primaryColor: Colors.deepPurple,
 
         ///app bar theme
         appBarTheme: const AppBarTheme(

@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'E-Commerce',
+          'Shopbiz',
           style: AppUtils.textBold(),
         ),
       ),
@@ -40,14 +40,17 @@ class HomeScreen extends StatelessWidget {
                   var user = snapshot.data!;
 
                   // Use null-aware operators to safely access properties
-                  final photoURL = user['photoURL']?.toString() ?? '';
+                  final photoURL = user['photoURL']?.toString() ??
+                      AppUtils.splashScreenBgImg;
                   final displayName = user['displayName']?.toString() ?? '';
 
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage: CachedNetworkImageProvider(photoURL),
                     ),
-                    title: Text("Welcome $displayName"),
+
+                    ///Creates a selectable text widget.
+                    title: SelectableText("Welcome $displayName"),
                   );
                 } else {
                   return Center(child: Text('No user data found.'));

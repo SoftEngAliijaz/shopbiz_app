@@ -87,12 +87,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Form(
               key: globalkey,
-              child: SingleChildScrollView(
-                child: Container(
-                  height: size.height * 0.80,
-                  width: size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: size.height * 0.90,
+                width: size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -104,11 +104,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 AssetImage('assets/images/e_commerce_logo.png'),
                           ),
                         ),
+                        SizedBox(height: 10),
 
                         ///
                         CustomTextField(
                           textEditingController: _idController,
-                          prefixIcon: Icons.abc,
+                          prefixIcon: Icons.numbers_outlined,
                           hintText: 'Enter Product ID',
                           validator: (v) {
                             if (v!.isEmpty) {
@@ -118,9 +119,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
+                        SizedBox(height: 10),
                         CustomTextField(
                           textEditingController: _nameController,
-                          prefixIcon: Icons.abc,
+                          prefixIcon: Icons.production_quantity_limits_outlined,
                           hintText: 'Enter Product Name',
                           validator: (v) {
                             if (v!.isEmpty) {
@@ -130,9 +132,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
+                        SizedBox(height: 10),
+
                         CustomTextField(
                           textEditingController: _descriptionController,
-                          prefixIcon: Icons.abc,
+                          prefixIcon: Icons.production_quantity_limits_outlined,
                           hintText: 'Enter Product Description',
                           validator: (v) {
                             if (v!.isEmpty) {
@@ -142,9 +146,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
+                        SizedBox(height: 10),
+
                         CustomTextField(
                           textEditingController: _priceController,
-                          prefixIcon: Icons.abc,
+                          prefixIcon: Icons.production_quantity_limits_outlined,
                           hintText: 'Enter Product Price',
                           validator: (v) {
                             if (v!.isEmpty) {
@@ -154,6 +160,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
+                        SizedBox(height: 10),
+
+                        ///Add Section to pick and upload images.
+                        Container(
+                          height: 200,
+                          width: size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.2),
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              _showModalBottomSheetSuggestions();
+                            },
+                            icon: const Icon(Icons.image_outlined),
+                          ),
+                        ),
+
+                        SizedBox(height: 10),
 
                         CustomButton(
                           title: 'Add Product',
@@ -171,5 +197,36 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
       ),
     );
+  }
+
+  void _showModalBottomSheetSuggestions() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: new Icon(Icons.camera_alt_outlined),
+                  title: new Text('Pick From Camera'),
+                  onTap: () => {_pickFromCamera()},
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.image_search_outlined),
+                  title: new Text('Pick From Gallery'),
+                  onTap: () => {_pickFromGallery()},
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  _pickFromCamera() {
+    return Fluttertoast.showToast(msg: 'Picking Image from Camera');
+  }
+
+  _pickFromGallery() {
+    return Fluttertoast.showToast(msg: 'Picking Image from Gallery');
   }
 }

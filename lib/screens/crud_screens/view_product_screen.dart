@@ -61,7 +61,7 @@ class ViewProductScreen extends StatelessWidget {
                 });
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: Text('No Data Found...'),
             );
           }
         },
@@ -69,3 +69,23 @@ class ViewProductScreen extends StatelessWidget {
     );
   }
 }
+/*
+ Container(
+                          height: 200,
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  child: Image.network(
+                                AppUtils.splashScreenBgImg,
+                                fit: BoxFit.fitWidth,
+                              )),
+                              ListTile(
+                                title: Text('Product Name'),
+                                subtitle: Text('Product Description'),
+                                trailing: Text('Price: price'),
+                              ),
+                            ],
+                          ),
+                        ),O
+*/

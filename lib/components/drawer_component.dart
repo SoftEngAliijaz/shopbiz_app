@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/screens/credientals/login_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/add_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/delete_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/update_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/view_product_screen.dart';
 import 'package:shopbiz_app/screens/home/user_screens/profile_screen.dart';
 
 class Components {
@@ -11,7 +15,7 @@ class Components {
       child: Column(
         children: [
           DrawerHeader(
-            padding: EdgeInsets.all(0.0),
+            padding: const EdgeInsets.all(0.0),
             child: Container(
               width: double.infinity,
               color: Colors.blue,
@@ -24,22 +28,37 @@ class Components {
           ),
           _listTileComponent(context, () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return ProfileScreen();
+              return const ProfileScreen();
             }));
           }, Icons.person_outline, 'Profile'),
-          _listTileComponent(
-              context, () {}, Icons.add_outlined, 'Add Products'),
-          _listTileComponent(
-              context, () {}, Icons.update_outlined, 'Update Products'),
-          _listTileComponent(
-              context, () {}, Icons.delete_outline, 'Delete Products'),
-          _listTileComponent(
-              context, () {}, Icons.view_agenda_outlined, 'View Products'),
+          _listTileComponent(context, () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return const AddProductScreen();
+            }));
+          }, Icons.add_outlined, 'Add Products'),
+          _listTileComponent(context, () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return const UpdateProductScreen();
+            }));
+          }, Icons.update_outlined, 'Update Products'),
+          _listTileComponent(context, () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return const DeleteProductScreen();
+            }));
+          }, Icons.delete_outline, 'Delete Products'),
+          _listTileComponent(context, () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return const ViewProductScreen();
+            }));
+          }, Icons.view_agenda_outlined, 'View Products'),
           _listTileComponent(context, () async {
+            ///signout
             await FirebaseAuth.instance.signOut();
+
+            /// ignore: use_build_context_synchronously
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (_) {
-              return LogInScreen();
+              return const LogInScreen();
             }), (route) => false);
           }, Icons.logout, 'LogOut'),
         ],
@@ -59,9 +78,9 @@ class Components {
           onTap: onTap,
           leading: Icon(leadingIcon),
           title: Text(title),
-          trailing: Icon(Icons.forward_outlined),
+          trailing: const Icon(Icons.forward_outlined),
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }

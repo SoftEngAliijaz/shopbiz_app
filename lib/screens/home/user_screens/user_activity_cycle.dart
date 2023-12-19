@@ -36,21 +36,10 @@ class UserActivityCycleScreen extends StatelessWidget {
 
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
-          // Navigate to HomeScreen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
+          return const HomeScreen();
         } else {
-          // Navigate to LogInScreen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LogInScreen()),
-          );
+          return const LogInScreen();
         }
-
-        // Placeholder, the actual widget returned won't be used
-        return Container();
       },
     );
   }
