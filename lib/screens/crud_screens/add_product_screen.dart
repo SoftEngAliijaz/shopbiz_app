@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
@@ -37,26 +39,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ///globaly key
   var globalkey = GlobalKey<FormState>();
 
+  File? _pickedImage;
+
   ///add Products Function
   Future<void> addProducts() async {
     try {
       if (globalkey.currentState!.validate()) {
-        await FirebaseFirestore.instance.collection('products').doc().set({
-          'id': _idController.text,
-          'name': _nameController.text,
-          'description': _descriptionController.text,
-          'price': _priceController.text,
-        }).then((_) {
-          Fluttertoast.showToast(msg: 'Product Added Successfully');
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const HomeScreen(),
-            ),
-          );
-        }).catchError((e) {
-          Fluttertoast.showToast(msg: e.toString());
-        });
+        await _uploadImage();
+        Fluttertoast.showToast(msg: 'Product Added Successfully');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const HomeScreen(),
+          ),
+        );
       }
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -104,7 +100,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 AssetImage('assets/images/e_commerce_logo.png'),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         ///
                         CustomTextField(
@@ -119,7 +115,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         CustomTextField(
                           textEditingController: _nameController,
                           prefixIcon: Icons.production_quantity_limits_outlined,
@@ -132,7 +128,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         CustomTextField(
                           textEditingController: _descriptionController,
@@ -146,7 +142,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         CustomTextField(
                           textEditingController: _priceController,
@@ -160,7 +156,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         ///Add Section to pick and upload images.
                         Container(
@@ -171,15 +167,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             border: Border.all(),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: IconButton(
-                            onPressed: () {
-                              _showModalBottomSheetSuggestions();
-                            },
-                            icon: const Icon(Icons.image_outlined),
-                          ),
+                          child: _pickedImage != null
+                              ? Image.file(
+                                  _pickedImage!,
+                                  height: 100,
+                                  width: 100,
+                                )
+                              : IconButton(
+                                  onPressed: () {
+                                    _showModalBottomSheetSuggestions();
+                                  },
+                                  icon: const Icon(Icons.image_outlined),
+                                ),
                         ),
 
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         CustomButton(
                           title: 'Add Product',
@@ -201,19 +203,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void _showModalBottomSheetSuggestions() {
     showModalBottomSheet(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         context: context,
         builder: (BuildContext context) {
           return Container(
             child: Wrap(
               children: [
                 ListTile(
-                  leading: new Icon(Icons.camera_alt_outlined),
-                  title: new Text('Pick From Camera'),
+                  leading: const Icon(Icons.camera_alt_outlined),
+                  title: const Text('Pick From Camera'),
                   onTap: () => {_pickFromCamera()},
                 ),
-                new ListTile(
-                  leading: new Icon(Icons.image_search_outlined),
-                  title: new Text('Pick From Gallery'),
+                ListTile(
+                  leading: const Icon(Icons.image_search_outlined),
+                  title: const Text('Pick From Gallery'),
                   onTap: () => {_pickFromGallery()},
                 ),
               ],
@@ -222,11 +225,120 @@ class _AddProductScreenState extends State<AddProductScreen> {
         });
   }
 
-  _pickFromCamera() {
-    return Fluttertoast.showToast(msg: 'Picking Image from Camera');
+  Future<void> _pickFromCamera() async {
+    Navigator.pop(context);
+    try {
+      final XFile? pickedImage = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 100);
+      if (pickedImage != null) {
+        setState(() {
+          _pickedImage = File(pickedImage.path);
+        });
+        Fluttertoast.showToast(msg: 'Image Picked From Camera');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
-  _pickFromGallery() {
-    return Fluttertoast.showToast(msg: 'Picking Image from Gallery');
+  Future<void> _pickFromGallery() async {
+    Navigator.pop(context);
+    try {
+      final XFile? pickedImage = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 100);
+      if (pickedImage != null) {
+        setState(() {
+          _pickedImage = File(pickedImage.path);
+        });
+        Fluttertoast.showToast(msg: 'Image Picked From Gellery');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    try {
+      if (_pickedImage == null) {
+        Fluttertoast.showToast(msg: 'No image selected');
+        return;
+      }
+
+      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+
+      Reference ref =
+          FirebaseStorage.instance.ref().child('images/$imageName.jpg');
+
+      await ref.putFile(_pickedImage!).then((taskSnapshot) async {
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+        // Add other product fields along with the imageUrl to the Firestore document
+        await FirebaseFirestore.instance.collection('products').add({
+          'id': _idController.text,
+          'name': _nameController.text,
+          'description': _descriptionController.text,
+          'price': _priceController.text,
+          'imageUrl': imageUrl,
+        });
+
+        // Now you can save the imageUrl to Firestore or use it as needed
+        Fluttertoast.showToast(msg: 'Image uploaded successfully');
+      });
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Error uploading image: $e');
+    }
   }
 }
+
+/*
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
+
+// ...
+
+Future<void> _pickFromCamera() async {
+  final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+
+  if (pickedFile != null) {
+    // Upload the image to Firebase Storage
+    await _uploadImage(pickedFile.path);
+  } else {
+    Fluttertoast.showToast(msg: 'No image selected');
+  }
+}
+
+Future<void> _pickFromGallery() async {
+  final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+
+  if (pickedFile != null) {
+    // Upload the image to Firebase Storage
+    await _uploadImage(pickedFile.path);
+  } else {
+    Fluttertoast.showToast(msg: 'No image selected');
+  }
+}
+ Future<void> _uploadImage(var filePath) async {
+    try {
+      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+
+      Reference ref =
+          FirebaseStorage.instance.ref().child('images/$imageName.jpg');
+
+      await ref.putFile(filePath).then((taskSnapshot) async {
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+        // Add imageUrl to product data
+        await FirebaseFirestore.instance.collection('products').doc().set({
+          // ... other product fields
+          'imageUrl': imageUrl,
+        });
+
+        // Now you can save the imageUrl to Firestore or use it as needed
+        Fluttertoast.showToast(msg: 'Image uploaded successfully');
+      });
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Error uploading image: $e');
+    }
+  }
+}
+
+*/

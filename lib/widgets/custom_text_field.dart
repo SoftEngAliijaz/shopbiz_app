@@ -27,6 +27,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       controller: textEditingController,
       decoration: InputDecoration(
+        filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),

@@ -22,17 +22,13 @@ class DataBaseServices {
 
   ///update product function
   static Future<void> updateProduct(
-    String productId,
     String id,
     String name,
     String description,
     String price,
   ) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .update({
+      await FirebaseFirestore.instance.collection('products').doc(id).update({
         'id': id,
         'name': name,
         'description': description,
