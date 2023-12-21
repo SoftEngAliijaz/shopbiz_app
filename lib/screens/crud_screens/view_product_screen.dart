@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shopbiz_app/screens/crud_screens/product_screens/product_detail_screens.dart';
 
 class ViewProductScreen extends StatelessWidget {
   const ViewProductScreen({Key? key}) : super(key: key);
@@ -22,6 +23,11 @@ class ViewProductScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 final v = snapshot.data!.docs[index];
                 return InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return ProductDetailScreen();
+                    }));
+                  },
                   child: _productCard(v),
                 );
               },
@@ -60,7 +66,10 @@ class ViewProductScreen extends StatelessWidget {
             Divider(),
             ListTile(
               tileColor: Colors.white,
-              leading: CircleAvatar(child: Text(v['id'])),
+              leading: CircleAvatar(
+                  child: Center(
+                child: Text(v['id'], overflow: TextOverflow.ellipsis),
+              )),
               title: Text(v['name']),
               subtitle: Text(v['description']),
               trailing: Text("Price:${v['price']}"),
