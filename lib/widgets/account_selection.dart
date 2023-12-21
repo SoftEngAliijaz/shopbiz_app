@@ -22,9 +22,7 @@ class AccountSelection extends StatelessWidget {
         Text(title.toString()),
         TextButton(
           onPressed: onPressed,
-          child: Text(
-            buttonTitle.toString(),
-          ),
+          child: Text(buttonTitle.toString()),
         ),
       ],
     );

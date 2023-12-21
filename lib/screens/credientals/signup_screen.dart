@@ -87,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
+                            const Text(
                               'WELCOME TO\nE-Commerce App\nCreate Your Account',
                               textAlign: TextAlign.center,
                               style: TextStyle(

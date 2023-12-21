@@ -27,15 +27,14 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       controller: textEditingController,
       decoration: InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        hintText: hintText,
-        hintStyle: const TextStyle(fontWeight: FontWeight.bold),
-        prefixIcon: Icon(prefixIcon),
-        suffixIcon: suffixWidget,
-      ),
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          hintText: hintText,
+          hintStyle: const TextStyle(fontWeight: FontWeight.bold),
+          prefixIcon: Icon(prefixIcon),
+          suffixIcon: suffixWidget),
     );
   }
 }

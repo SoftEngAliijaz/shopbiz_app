@@ -19,9 +19,7 @@ class CustomButton extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       color: Colors.blue,
       onPressed: onPressed,
-      child: Center(
-        child: Text(title.toString()),
-      ),
+      child: Center(child: Text(title.toString())),
     );
   }
 }

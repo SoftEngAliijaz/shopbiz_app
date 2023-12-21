@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shopbiz_app/screens/credientals/forget_password_screen.dart';
 import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
@@ -45,9 +46,9 @@ class _LogInScreenState extends State<LogInScreen> {
           }));
         }
       } on FirebaseAuthException catch (e) {
-        _showErrorSnackBar(e.message ?? 'An error occurred');
+        Fluttertoast.showToast(msg: e.message ?? 'An error occurred');
       } catch (e) {
-        _showErrorSnackBar('An error occurred');
+        Fluttertoast.showToast(msg: 'An error occurred');
       } finally {
         setState(() {
           _isLoading = false;
@@ -56,21 +57,12 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           height: double.infinity,
           width: double.infinity,
           child: SingleChildScrollView(

@@ -39,6 +39,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ///globaly key
   var globalkey = GlobalKey<FormState>();
 
+  ///global for picked image
   File? _pickedImage;
 
   ///add Products Function
@@ -289,56 +290,3 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 }
-
-/*
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:image_picker/image_picker.dart';
-
-// ...
-
-Future<void> _pickFromCamera() async {
-  final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
-
-  if (pickedFile != null) {
-    // Upload the image to Firebase Storage
-    await _uploadImage(pickedFile.path);
-  } else {
-    Fluttertoast.showToast(msg: 'No image selected');
-  }
-}
-
-Future<void> _pickFromGallery() async {
-  final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
-
-  if (pickedFile != null) {
-    // Upload the image to Firebase Storage
-    await _uploadImage(pickedFile.path);
-  } else {
-    Fluttertoast.showToast(msg: 'No image selected');
-  }
-}
- Future<void> _uploadImage(var filePath) async {
-    try {
-      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-
-      Reference ref =
-          FirebaseStorage.instance.ref().child('images/$imageName.jpg');
-
-      await ref.putFile(filePath).then((taskSnapshot) async {
-        String imageUrl = await taskSnapshot.ref.getDownloadURL();
-        // Add imageUrl to product data
-        await FirebaseFirestore.instance.collection('products').doc().set({
-          // ... other product fields
-          'imageUrl': imageUrl,
-        });
-
-        // Now you can save the imageUrl to Firestore or use it as needed
-        Fluttertoast.showToast(msg: 'Image uploaded successfully');
-      });
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'Error uploading image: $e');
-    }
-  }
-}
-
-*/

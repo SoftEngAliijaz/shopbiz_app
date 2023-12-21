@@ -47,7 +47,7 @@ class GridViewRoutes {
           MaterialPageRoute(builder: (context) => const ViewProductScreen()));
     }
   }
-
+}
 /*
 void _navigateToScreen(BuildContext context, String screenTitle) {
     // You can replace the following switch statement with your own logic
@@ -72,4 +72,3 @@ void _navigateToScreen(BuildContext context, String screenTitle) {
   }
 }
  */
-}
