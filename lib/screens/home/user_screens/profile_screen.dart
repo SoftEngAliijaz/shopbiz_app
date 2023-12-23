@@ -1,11 +1,10 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shopbiz_app/constants/constants.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -43,55 +42,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (user['photoURL'] != null || user['displayName'] != null) {
               return Column(
                 children: [
+                  SizedBox(height: 10),
+                  // SizedBox(
+                  //   child: Card(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10.0),
+                  //       child: CircleAvatar(
+                  //         radius: 100,
+                  //         backgroundImage: CachedNetworkImageProvider(
+                  //             user['photoURL'] ?? AppUtils.splashScreenBgImg),
+                  //         child: Align(
+                  //           alignment: Alignment.bottomRight,
+                  //           child: CircleAvatar(
+                  //             backgroundColor: Theme.of(context).primaryColor,
+                  //             child: Center(
+                  //               child: IconButton(
+                  //                 onPressed: () {
+                  //                   _showModalBottomSheetSuggestions(context);
+                  //                 },
+                  //                 icon: const Icon(
+                  //                   Icons.add_outlined,
+                  //                   color: Colors.white,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
+                  ///profile image
                   SizedBox(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: CircleAvatar(
-                          radius: 100,
-                          backgroundImage: CachedNetworkImageProvider(
-                              user['photoURL'] ?? AppUtils.splashScreenBgImg),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: CircleAvatar(
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: Center(
-                                child: IconButton(
-                                  onPressed: () {
-                                    _showModalBottomSheetSuggestions(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.add_outlined,
-                                    color: Colors.white,
-                                  ),
+                    child: CircleAvatar(
+                      radius: 100,
+                      child: ClipOval(
+                        child: Container(
+                          child: _pickedImage != null
+                              ? Image.file(
+                                  _pickedImage!,
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                )
+                              : TextButton.icon(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.photo_album),
+                                  label: const Text('Pick Image'),
                                 ),
-                              ),
-                            ),
-                          ),
                         ),
                       ),
                     ),
                   ),
-
-                  ///profile image
-                  SizedBox(
-                    child: ClipRRect(
-                      clipBehavior: Clip.antiAlias,
-                      borderRadius: BorderRadius.circular(100),
-                      child: Container(
-                        child: _pickedImage != null
-                            ? Image.file(_pickedImage!)
-                            : TextButton.icon(
-                                onPressed: () {},
-                                icon: const Icon(Icons.photo_album),
-                                label: const Text('Pick Image'),
-                              ),
-                      ),
-                    ),
-                  ),
+                  SizedBox(height: 10),
 
                   ///profile cards
-                  _profileCard(Icons.person_outline, user['name'].toString()),
+                  _profileCard(
+                      Icons.person_outline, user['displayName'].toString()),
+                  SizedBox(height: 10),
+
                   _profileCard(Icons.email_outlined, user['email'].toString()),
 
                   ///save button

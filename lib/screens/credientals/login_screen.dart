@@ -48,11 +48,6 @@ class _LogInScreenState extends State<LogInScreen> {
         Fluttertoast.showToast(msg: e.message ?? 'An error occurred');
       } catch (e) {
         Fluttertoast.showToast(msg: e.toString());
-      } finally {
-        setState(() {
-          _isLoading =
-              false; // Set loading state to false when login is complete
-        });
       }
     }
   }
