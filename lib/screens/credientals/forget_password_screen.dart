@@ -72,7 +72,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   _isLoading
                       ? const CircularProgressIndicator()
                       : CustomButton(
-                          title: 'Send Request',
+                          title: _isLoading
+                              ? 'Sending Request...'
+                              : 'Send Request',
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               String email = emailController.text.trim();

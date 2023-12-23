@@ -21,13 +21,13 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController _passwordC = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isObscureText = true;
-  bool _isLoading = false;
+  bool _isLoading = false; // Add this variable to track loading state
 
   Future<void> _loginCredentials() async {
     if (_formKey.currentState!.validate()) {
       try {
         setState(() {
-          _isLoading = true;
+          _isLoading = true; // Set loading state to true when logging in
         });
 
         UserCredential userCredential = await FirebaseAuth.instance
@@ -40,7 +40,6 @@ class _LogInScreenState extends State<LogInScreen> {
               .doc(userCredential.user!.uid)
               .get();
 
-          // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
             return const HomeScreen();
           }));
@@ -48,10 +47,11 @@ class _LogInScreenState extends State<LogInScreen> {
       } on FirebaseAuthException catch (e) {
         Fluttertoast.showToast(msg: e.message ?? 'An error occurred');
       } catch (e) {
-        Fluttertoast.showToast(msg: 'An error occurred');
+        Fluttertoast.showToast(msg: e.toString());
       } finally {
         setState(() {
-          _isLoading = false;
+          _isLoading =
+              false; // Set loading state to false when login is complete
         });
       }
     }
@@ -138,9 +138,11 @@ class _LogInScreenState extends State<LogInScreen> {
                               ? const CircularProgressIndicator()
                               : CustomButton(
                                   title: 'LOGIN',
-                                  onPressed: () {
-                                    _loginCredentials();
-                                  },
+                                  onPressed: _isLoading
+                                      ? null
+                                      : () {
+                                          _loginCredentials();
+                                        },
                                 ),
                           Align(
                             alignment: Alignment.bottomRight,

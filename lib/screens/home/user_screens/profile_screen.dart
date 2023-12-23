@@ -1,12 +1,22 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shopbiz_app/constants/constants.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  ///global image picker
+  File? _pickedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +72,29 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Card(
-                      child: ListTile(
-                    leading: Icon(Icons.person_outline),
-                    title: Text(user['displayName'].toString()),
-                  )),
-                  Card(
-                      child: ListTile(
-                    leading: Icon(Icons.email_outlined),
-                    title: Text(user['email'].toString()),
-                  )),
+
+                  ///profile image
+                  SizedBox(
+                    child: ClipRRect(
+                      clipBehavior: Clip.antiAlias,
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        child: _pickedImage != null
+                            ? Image.file(_pickedImage!)
+                            : TextButton.icon(
+                                onPressed: () {},
+                                icon: const Icon(Icons.photo_album),
+                                label: const Text('Pick Image'),
+                              ),
+                      ),
+                    ),
+                  ),
+
+                  ///profile cards
+                  _profileCard(Icons.person_outline, user['name'].toString()),
+                  _profileCard(Icons.email_outlined, user['email'].toString()),
+
+                  ///save button
                   MaterialButton(
                     color: Theme.of(context).primaryColor,
                     child: Text(
@@ -95,21 +118,32 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  Card _profileCard(
+    IconData leadingIcon,
+    String title,
+  ) {
+    return Card(
+        child: ListTile(
+      leading: Icon(leadingIcon),
+      title: Text(title),
+    ));
+  }
+
   void _showModalBottomSheetSuggestions(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Container(
+          return SizedBox(
             child: Wrap(
               children: [
                 ListTile(
-                  leading: new Icon(Icons.camera_alt_outlined),
-                  title: new Text('Pick From Camera'),
+                  leading: const Icon(Icons.camera_alt_outlined),
+                  title: const Text('Pick From Camera'),
                   onTap: () => {_pickFromCamera()},
                 ),
-                new ListTile(
-                  leading: new Icon(Icons.image_search_outlined),
-                  title: new Text('Pick From Gallery'),
+                ListTile(
+                  leading: const Icon(Icons.image_search_outlined),
+                  title: const Text('Pick From Gallery'),
                   onTap: () => {_pickFromGallery()},
                 ),
               ],
@@ -118,11 +152,39 @@ class ProfileScreen extends StatelessWidget {
         });
   }
 
-  _pickFromCamera() {
-    return Fluttertoast.showToast(msg: 'Picking Image from Camera');
+  Future<void> _pickFromCamera() async {
+    Navigator.pop(context);
+    try {
+      final XFile? selectedImage =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (selectedImage != null) {
+        setState(() {
+          _pickedImage = File(selectedImage.path);
+        });
+        Fluttertoast.showToast(msg: 'Image Selected');
+      } else {
+        Fluttertoast.showToast(msg: 'Image Not Selected');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
-  _pickFromGallery() {
-    return Fluttertoast.showToast(msg: 'Picking Image from Gallery');
+  Future<void> _pickFromGallery() async {
+    Navigator.pop(context);
+    try {
+      final XFile? selectedImage =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (selectedImage != null) {
+        setState(() {
+          _pickedImage = File(selectedImage.path);
+        });
+        Fluttertoast.showToast(msg: 'Image Selected');
+      } else {
+        Fluttertoast.showToast(msg: 'Image Not Selected');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 }

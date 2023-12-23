@@ -22,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _rePassC = TextEditingController();
   bool _isObscureText = true; // Use one variable for obscuring text
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false; // Add this variable to track loading state
 
   Future<void> _signUpCredentials() async {
     if (_formKey.currentState!.validate()) {
@@ -31,6 +32,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
 
       try {
+        setState(() {
+          _isLoading = true; // Set loading state to true when signing up
+        });
+
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailC.text, password: _passwordC.text);
@@ -41,12 +46,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             email: _emailC.text,
             displayName: _nameC.text,
           );
-
           await FirebaseFirestore.instance
               .collection('users')
               .doc(userModel.uid)
               .set(userModel.toMap());
-
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
             return const LogInScreen();
           }));
@@ -60,6 +63,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       } catch (e) {
         Fluttertoast.showToast(msg: 'Error: ${e.toString()}');
+      } finally {
+        setState(() {
+          _isLoading =
+              false; // Set loading state to false when signup is complete
+        });
       }
     }
   }
@@ -180,10 +188,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             CustomButton(
-                              title: 'SIGN UP',
-                              onPressed: () {
-                                _signUpCredentials();
-                              },
+                              title: _isLoading ? 'SIGNING UP...' : 'SIGN UP',
+                              onPressed: _isLoading
+                                  ? null
+                                  : () {
+                                      _signUpCredentials();
+                                    },
                             ),
                             AccountSelection(
                               title: 'Already have an account?',
