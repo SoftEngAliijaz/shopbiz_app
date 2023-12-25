@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/screens/home/user_screens/user_activity_cycle.dart';
+import 'package:shopbiz_app/screens/user_screens/user_activity_cycle.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

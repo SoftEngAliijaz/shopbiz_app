@@ -6,7 +6,7 @@ import 'package:shopbiz_app/screens/crud_screens/add_product_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/delete_product_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/update_product_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/view_product_screen.dart';
-import 'package:shopbiz_app/screens/home/user_screens/profile_screen.dart';
+import 'package:shopbiz_app/screens/user_screens/profile_screen.dart';
 
 class Components {
   ///firebase auth instance
