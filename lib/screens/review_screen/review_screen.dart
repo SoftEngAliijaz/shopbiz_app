@@ -5,7 +5,7 @@ import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
 
 class ReviewScreen extends StatefulWidget {
-  const ReviewScreen({super.key});
+  const ReviewScreen({Key? key}) : super(key: key);
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
@@ -16,14 +16,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
   TextEditingController viewController = TextEditingController();
   bool isSaving = false;
 
-  showAlert(BuildContext context) {
+  void showAlert(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: const Text("Review your place"),
-            content: Form(
-                child: Column(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("Review Your Place"),
+          content: Form(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
@@ -36,54 +36,66 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomTextField(
+                    hintText: 'Enter Views',
                     textEditingController: viewController,
-                    hintText: 'Enter Location',
                   ),
                 ),
               ],
-            )),
-            actions: [
-              CustomButton(
-                  title: "SAVE",
-                  onPressed: () {
-                    saveReview();
-                    Navigator.pop(context);
-                  }),
-              TextButton(
-                  child: const Text("Cancel"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-            ],
-          );
-        });
+            ),
+          ),
+          actions: [
+            CustomButton(
+              title: "SAVE",
+              onPressed: () {
+                saveReview();
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  saveReview() async {
+  Future<void> saveReview() async {
     setState(() {
       isSaving = true;
     });
-    await FirebaseFirestore.instance.collection('reviews').add({
-      'location': locationController.text,
-      'views': viewController.text
-    }).then((value) {
+
+    try {
+      await FirebaseFirestore.instance.collection('reviews').add({
+        'location': locationController.text,
+        'views': viewController.text,
+      });
+
       setState(() {
         isSaving = false;
-        Fluttertoast.showToast(msg: 'review uploaded successfully');
+        Fluttertoast.showToast(msg: 'Review uploaded successfully');
       });
-    });
+    } catch (e) {
+      setState(() {
+        isSaving = false;
+        Fluttertoast.showToast(msg: 'Failed to upload review');
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isSaving == true
+      body: isSaving
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Column(
                 children: [
                   const Text(
-                    "Recent Review by other",
+                    "Recent Reviews by Others",
                     style: TextStyle(fontSize: 30, color: Colors.black),
                   ),
                   Expanded(
@@ -95,25 +107,30 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData) {
                           return const Center(
-                              child: CircularProgressIndicator());
+                            child: CircularProgressIndicator(),
+                          );
                         }
 
                         return ListView.builder(
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final data = snapshot.data!.docs[index];
+                            final value = snapshot.data!.docs[index];
+                            final location = value['location'];
+                            final views = value['views'];
+
                             return Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: Card(
                                 elevation: 10,
-                                // color: Colors.primaries[Random().nextInt(17)],
                                 child: ListTile(
                                   title: Text(
-                                    data['location'],
+                                    location,
                                     style: const TextStyle(
-                                        fontSize: 20, color: Colors.black),
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                  subtitle: Text(data['views']),
+                                  subtitle: Text(views),
                                 ),
                               ),
                             );
