@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
@@ -101,7 +102,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 AssetImage('assets/images/e_commerce_logo.png'),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        sizedbox(),
 
                         ///
                         CustomTextField(
@@ -116,7 +117,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        sizedbox(),
                         CustomTextField(
                           textEditingController: _nameController,
                           prefixIcon: Icons.production_quantity_limits_outlined,
@@ -129,7 +130,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        sizedbox(),
 
                         CustomTextField(
                           textEditingController: _descriptionController,
@@ -143,7 +144,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        sizedbox(),
 
                         CustomTextField(
                           textEditingController: _priceController,
@@ -157,7 +158,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        sizedbox(),
 
                         ///Add Section to pick and upload images.
                         Container(
@@ -178,11 +179,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   onPressed: () {
                                     _showModalBottomSheetSuggestions();
                                   },
-                                  icon: const Icon(Icons.image_outlined),
+                                  icon: Icon(Icons.image_outlined),
                                 ),
                         ),
 
-                        const SizedBox(height: 10),
+                        sizedbox(),
 
                         CustomButton(
                           title: 'Add Product',

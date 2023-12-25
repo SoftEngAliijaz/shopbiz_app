@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shopbiz_app/constants/constants.dart';
 
 class UpdateProductScreen extends StatelessWidget {
   const UpdateProductScreen({Key? key}) : super(key: key);
@@ -15,50 +16,65 @@ class UpdateProductScreen extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: AppUtils.customProgressIndicator());
+          }
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data!.docs.isEmpty) {
+            // Display a message if there is no data
+            return const Center(
+                child: Text('No products available to Delete.'));
           }
           if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, int index) {
-                final v = snapshot.data!.docs[index];
-                TextEditingController nameC = TextEditingController();
-                TextEditingController descriptionC = TextEditingController();
-                TextEditingController priceC = TextEditingController();
+                final productData = snapshot.data!.docs[index];
+                TextEditingController nameController = TextEditingController();
+                TextEditingController descriptionController =
+                    TextEditingController();
+                TextEditingController priceController = TextEditingController();
+
+                // Set initial values for the controllers
+                nameController.text = productData['name'];
+                descriptionController.text = productData['description'];
+                priceController.text = productData['price'].toString();
 
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListTile(
-                      leading:
-                          CircleAvatar(child: Center(child: Text(v['id']))),
-                      title: Text(v['name']),
-                      subtitle: Text(v['description']),
+                      leading: CircleAvatar(
+                          child: Center(child: Text(productData['id']))),
+                      title: Text(productData['name']),
+                      subtitle: Text(productData['description']),
                       onTap: () {
                         showDialog(
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                              title: Text('Are You Sure?'),
+                              title: Text('Update Product'),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  // TextFormFields for updating product information
                                   TextFormField(
-                                    controller: nameC,
+                                    controller: nameController,
                                     decoration: InputDecoration(
-                                      hintText: "Product Name: ${v['name']}",
+                                      hintText: "Product Name",
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: descriptionC,
+                                    controller: descriptionController,
                                     decoration: InputDecoration(
-                                      hintText: "Desc: ${v['description']}",
+                                      hintText: "Description",
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: priceC,
+                                    controller: priceController,
+                                    keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
-                                      hintText: "Price: ${v['price']}",
+                                      hintText: "Price",
                                     ),
                                   ),
                                 ],
@@ -68,24 +84,28 @@ class UpdateProductScreen extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text("No"),
+                                  child: Text("Cancel"),
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
+                                    // Update the product information in Firestore
                                     await FirebaseFirestore.instance
                                         .collection('products')
-                                        .doc(v.id)
+                                        .doc(productData.id)
                                         .update({
-                                          'name': nameC.text,
-                                          'description': descriptionC.text,
-                                          'price': priceC.text,
+                                          'name': nameController.text,
+                                          'description':
+                                              descriptionController.text,
+                                          'price': double.parse(
+                                              priceController.text),
                                         })
                                         .whenComplete(
                                             () => Navigator.pop(context))
                                         .then((value) => Fluttertoast.showToast(
-                                            msg: 'Updated ${nameC.text}'));
+                                            msg:
+                                                'Updated ${nameController.text}'));
                                   },
-                                  child: Text("Yes"),
+                                  child: Text("Update"),
                                 ),
                               ],
                             );
@@ -98,9 +118,7 @@ class UpdateProductScreen extends StatelessWidget {
               },
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: AppUtils.customProgressIndicator());
           }
         },
       ),

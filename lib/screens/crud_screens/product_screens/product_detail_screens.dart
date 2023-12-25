@@ -15,7 +15,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       appBar: AppBar(
         title: Text('Product Details'),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         child: Row(
           children: [
             Expanded(

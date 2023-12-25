@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
 
       ///theme
       theme: ThemeData(
-        ///
+        ///colorScheme
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
 
-        ///
+        ///cardTheme
         cardTheme: const CardTheme(color: Colors.white),
 
-        ///
+        ///primaryColor
         primaryColor: Colors.deepPurple,
 
         ///app bar theme

@@ -5,9 +5,6 @@ class ProductFavScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ProductFavScreen'),
-      ),
       body: Center(
         child: Text('ProductFavScreen'),
       ),

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/screens/crud_screens/product_screens/product_detail_screens.dart';
 
 class ViewProductScreen extends StatelessWidget {
   const ViewProductScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,39 +15,47 @@ class ViewProductScreen extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.none ||
-              snapshot.connectionState == ConnectionState.none) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasData) {
-            return ListView.separated(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                final v = snapshot.data!.docs[index];
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return ProductDetailScreen();
-                    }));
-                  },
-                  child: _productCard(v),
-                );
-              },
-              separatorBuilder: (c, i) {
-                return const Divider();
-              },
-            );
+          // 1. Check if connection state is active or has data
+          if (snapshot.connectionState == ConnectionState.active ||
+              snapshot.hasData) {
+            // 2. Check if snapshot data is null or the document list is empty
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              // 3. Display a loading indicator if there is no data yet
+              return Center(child: Text('No products available'));
+            } else {
+              // 4. Display the list of products
+              return ListView.separated(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  // 5. Access individual product data
+                  final productData = snapshot.data!.docs[index];
+
+                  return InkWell(
+                    onTap: () {
+                      // 6. Navigate to the product detail screen when tapped
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return ProductDetailScreen();
+                      }));
+                    },
+                    child: _productCard(productData),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  // 7. Divider between product items
+                  return const Divider();
+                },
+              );
+            }
           } else {
-            return const Center(
-              child: Text('No Data Found...'),
-            );
+            // 8. Display a loading indicator if the connection state is not active
+            return Center(child: AppUtils.customProgressIndicator());
           }
         },
       ),
     );
   }
 
-  Card _productCard(QueryDocumentSnapshot<Object?> v) {
+  Card _productCard(QueryDocumentSnapshot<Object?> productData) {
     return Card(
       color: Colors.white,
       child: Container(
@@ -57,7 +67,8 @@ class ViewProductScreen extends StatelessWidget {
               child: Container(
                 color: Colors.white,
                 child: Image.network(
-                  v['imageUrl'],
+                  // 9. Load product image from the network
+                  productData['imageUrl'],
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -67,12 +78,19 @@ class ViewProductScreen extends StatelessWidget {
             ListTile(
               tileColor: Colors.white,
               leading: CircleAvatar(
-                  child: Center(
-                child: Text(v['id'], overflow: TextOverflow.ellipsis),
-              )),
-              title: Text(v['name']),
-              subtitle: Text(v['description']),
-              trailing: Text("Price:${v['price']}"),
+                child: Center(
+                  // 10. Display product ID in the circle avatar
+                  child: Text(
+                    productData['id'],
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              // 11. Display product name in the title
+              title: Text(productData['name']),
+              // 12. Display product description in the subtitle
+              subtitle: Text(productData['description']),
+              trailing: Text("Price: ${productData['price']}"),
             ),
           ],
         ),

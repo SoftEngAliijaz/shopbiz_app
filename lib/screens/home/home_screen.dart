@@ -35,6 +35,7 @@ class HomeScreen extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
+                  debugPrint("Snapshot Error: ${snapshot.error}");
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData && snapshot.data != null) {
                   var user = snapshot.data!;

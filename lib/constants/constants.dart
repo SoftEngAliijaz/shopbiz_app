@@ -11,8 +11,8 @@ class AppUtils {
   ///CircularProgressIndicator
   static Center customProgressIndicator() => const Center(
           child: CircularProgressIndicator(
-        color: Colors.white,
-        backgroundColor: Colors.blue,
+        color: Colors.red,
+        backgroundColor: Colors.deepPurple,
       ));
 
   ///animation styles
@@ -22,4 +22,22 @@ class AppUtils {
       fontSize: 15.0,
     );
   }
+
+  ///profile screen info cards
+  ///where we show profile info
+  ///like name,email etc
+  static Card profileCard(
+    IconData leadingIcon,
+    String title,
+  ) {
+    return Card(
+        child: ListTile(
+      leading: Icon(leadingIcon),
+      title: Text(title),
+    ));
+  }
 }
+
+///sizedbox custom
+///not added in class to access quickly
+SizedBox sizedbox() => const SizedBox(height: 10);
