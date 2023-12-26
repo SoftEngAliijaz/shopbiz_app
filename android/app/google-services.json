@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1093917564056",
+    "firebase_url": "https://shopbiz-b0e8c-default-rtdb.firebaseio.com",
     "project_id": "shopbiz-b0e8c",
     "storage_bucket": "shopbiz-b0e8c.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.shopbiz_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1093917564056-j1qu9pouujj5d02ktmsskq1laf76psa6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shopbiz_app",
+            "certificate_hash": "3578b9a32f7f9a08a29d5513c190a73bf63f081e"
+          }
+        },
+        {
+          "client_id": "1093917564056-df4vregtad324nk20e66pa4n0v1r8mui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBnl34pTooydmIiL-HO1G6cLj9u2n3ZyR8"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093917564056-df4vregtad324nk20e66pa4n0v1r8mui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
