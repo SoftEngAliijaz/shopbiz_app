@@ -16,7 +16,72 @@ class _ReviewScreenState extends State<ReviewScreen> {
   TextEditingController viewController = TextEditingController();
   bool isSaving = false;
 
-  void showAlert(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Reviews'),
+      ),
+      body: isSaving
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('reviews')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        return ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final value = snapshot.data!.docs[index];
+                            final location = value['location'];
+                            final views = value['views'];
+
+                            return Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Card(
+                                elevation: 10,
+                                child: ListTile(
+                                  title: Text(
+                                    location,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  subtitle: Text(views),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.pink,
+        onPressed: () {
+          showDialogBox(context);
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void showDialogBox(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) {
@@ -84,71 +149,5 @@ class _ReviewScreenState extends State<ReviewScreen> {
         Fluttertoast.showToast(msg: 'Failed to upload review');
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: isSaving
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: Column(
-                children: [
-                  const Text(
-                    "Recent Reviews by Others",
-                    style: TextStyle(fontSize: 30, color: Colors.black),
-                  ),
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('reviews')
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-
-                        return ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final value = snapshot.data!.docs[index];
-                            final location = value['location'];
-                            final views = value['views'];
-
-                            return Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Card(
-                                elevation: 10,
-                                child: ListTile(
-                                  title: Text(
-                                    location,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  subtitle: Text(views),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink,
-        onPressed: () {
-          showAlert(context);
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
   }
 }

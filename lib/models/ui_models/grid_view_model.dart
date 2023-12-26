@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/screens/crud_screens/add_product_screen.dart';
-import 'package:shopbiz_app/screens/crud_screens/delete_product_screen.dart';
-import 'package:shopbiz_app/screens/crud_screens/update_product_screen.dart';
-import 'package:shopbiz_app/screens/crud_screens/view_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/crud/add_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/crud/delete_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/crud/update_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/crud/view_product_screen.dart';
 
 class GridViewModel {
   ///var

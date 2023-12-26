@@ -51,25 +51,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return Column(
               children: [
                 SizedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: CircleAvatar(
-                      radius: 100,
-                      child: ClipOval(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: CircleAvatar(
+                        radius: 100,
+                        backgroundColor: Colors.grey,
                         child: InkWell(
                           onTap: () => showModalBottomSheetSuggestions(context),
                           child: Container(
+                            width: double.infinity,
+                            height: double.infinity,
                             child: _pickedImage != null
-                                ? Image.file(
-                                    _pickedImage!,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
+                                ? CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: FileImage(_pickedImage!),
                                   )
                                 : user['photoURL'] != null
-                                    ? Image.network(
-                                        user['photoURL'],
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
+                                    ? CircleAvatar(
+                                        radius: 100,
+                                        backgroundImage:
+                                            NetworkImage(user['photoURL']),
                                       )
                                     : const Icon(Icons.person, size: 80),
                           ),

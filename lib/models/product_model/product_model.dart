@@ -4,6 +4,7 @@ class ProductModel {
   final String description;
   final double price;
   final String imageUrl;
+  bool isInCart; // New property
 
   // Constructor
   ProductModel({
@@ -12,6 +13,7 @@ class ProductModel {
     required this.description,
     required this.price,
     required this.imageUrl,
+    this.isInCart = false, // Default value
   });
 
   // Factory method to create an instance from a map (e.g., from JSON)
@@ -22,6 +24,7 @@ class ProductModel {
       description: json['description'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       imageUrl: json['imageUrl'] ?? '',
+      isInCart: json['isInCart'] ?? false, // Added property
     );
   }
 
@@ -33,13 +36,14 @@ class ProductModel {
       'description': description,
       'price': price,
       'imageUrl': imageUrl,
+      'isInCart': isInCart, // Added property
     };
   }
 
   // Override toString for better debugging
   @override
   String toString() {
-    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, imageUrl: $imageUrl)';
+    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, imageUrl: $imageUrl, isInCart: $isInCart)';
   }
 
   // Override == for equality comparison
@@ -52,7 +56,8 @@ class ProductModel {
           name == other.name &&
           description == other.description &&
           price == other.price &&
-          imageUrl == other.imageUrl;
+          imageUrl == other.imageUrl &&
+          isInCart == other.isInCart;
 
   // Override hashCode for consistency with ==
   @override
@@ -61,5 +66,10 @@ class ProductModel {
       name.hashCode ^
       description.hashCode ^
       price.hashCode ^
-      imageUrl.hashCode;
+      imageUrl.hashCode ^
+      isInCart.hashCode;
 }
+
+/*
+
+*/
