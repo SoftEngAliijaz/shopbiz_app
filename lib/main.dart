@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
         ///primaryColor
         primaryColor: Colors.deepPurple,
 
+        ///fontFamily
+        fontFamily: 'roboto',
+
         ///app bar theme
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: Colors.white),

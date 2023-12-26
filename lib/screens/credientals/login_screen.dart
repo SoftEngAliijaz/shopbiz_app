@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopbiz_app/screens/credientals/forget_password_screen.dart';
 import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
 import 'package:shopbiz_app/widgets/custom_button.dart';
 import 'package:shopbiz_app/widgets/custom_text_field.dart';
+import 'package:social_auth_buttons/res/buttons/google_auth_button.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({Key? key}) : super(key: key);
@@ -49,6 +51,31 @@ class _LogInScreenState extends State<LogInScreen> {
       } catch (e) {
         Fluttertoast.showToast(msg: e.toString());
       }
+    }
+  }
+
+  ///signign with google
+  Future<void> signInWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signIn();
+      Navigator.push(context, MaterialPageRoute(builder: (_) {
+        return HomeScreen();
+      }));
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  Future<void> signOutWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+      Navigator.push(context, MaterialPageRoute(builder: (_) {
+        return LogInScreen();
+      }));
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
     }
   }
 
@@ -139,6 +166,12 @@ class _LogInScreenState extends State<LogInScreen> {
                                           _loginCredentials();
                                         },
                                 ),
+                          GoogleAuthButton(
+                            onPressed: () async {
+                              print('signin');
+                              await signInWithGoogle();
+                            },
+                          ),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: TextButton(

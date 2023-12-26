@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/constants/constants.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key}) : super(key: key);
+  final String? getId;
+  final String? getTitle;
+  final String? getDescription;
+  final String? getPrice;
+  final String? getImage;
+
+  const ProductDetailScreen({
+    Key? key,
+    this.getId,
+    this.getTitle,
+    this.getDescription,
+    this.getPrice,
+    this.getImage,
+  }) : super(key: key);
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -13,7 +25,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details'),
+        title: Text(widget.getTitle!),
       ),
       bottomNavigationBar: SizedBox(
         child: Row(
@@ -61,17 +73,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               width: double.infinity,
               child: Center(
                 child: Image.network(
-                  AppUtils.splashScreenBgImg,
+                  widget.getImage!,
                   fit: BoxFit.contain,
                   width: double.infinity,
                 ),
               ),
             ),
             ListTile(
-              leading: CircleAvatar(),
-              title: Text('title'),
-              subtitle: Text('subtitle'),
-              trailing: Text('Price'),
+              leading: CircleAvatar(
+                child: Text(widget.getId!),
+              ),
+              title: Text(widget.getTitle!),
+              subtitle: Text(widget.getDescription!),
+              trailing: Text(widget.getPrice!),
             ),
           ],
         ),

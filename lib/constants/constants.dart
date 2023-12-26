@@ -41,3 +41,8 @@ class AppUtils {
 ///sizedbox custom
 ///not added in class to access quickly
 SizedBox sizedbox() => const SizedBox(height: 10);
+
+/*
+  ///keytool -list -v -keystore "C:\Users\YourUserName\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+  ///C:\Program Files\Android\Android Studio\jbr\bin
+*/

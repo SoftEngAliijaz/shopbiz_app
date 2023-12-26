@@ -34,7 +34,13 @@ class ViewProductScreen extends StatelessWidget {
                     onTap: () {
                       // 6. Navigate to the product detail screen when tapped
                       Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return ProductDetailScreen();
+                        return ProductDetailScreen(
+                          getId: productData['id'],
+                          getTitle: productData['name'],
+                          getDescription: productData['description'],
+                          getPrice: productData['price'],
+                          getImage: productData['imageUrl'],
+                        );
                       }));
                     },
                     child: _productCard(productData),
