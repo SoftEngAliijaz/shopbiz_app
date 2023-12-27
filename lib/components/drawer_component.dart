@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/screens/credientals/login_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/crud/add_product_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/crud/delete_product_screen.dart';
-import 'package:shopbiz_app/screens/crud_screens/crud/view_product_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/crud/update_product_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/crud/view_product_screen.dart';
 import 'package:shopbiz_app/screens/crud_screens/product_screens/product_cart_screen.dart';
+import 'package:shopbiz_app/screens/crud_screens/product_screens/product_fav_screen.dart';
 import 'package:shopbiz_app/screens/review_screen/review_screen.dart';
 import 'package:shopbiz_app/screens/user_screens/profile_screen.dart';
 
@@ -23,25 +23,20 @@ class Components {
             child: Container(
               width: double.infinity,
               color: Theme.of(context).primaryColor,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/e_commerce_logo.png'),
-                    ),
-                    SizedBox(width: 10),
-                    Center(
-                      child: Text(
-                        'WELCOME TO Shopbiz',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/images/e_commerce_logo.png'),
+                  ),
+                  SizedBox(width: 10),
+                  Center(
+                    child: Text('WELCOME TO SHOPBIZ',
                         overflow: TextOverflow.ellipsis,
-                        style: AppUtils.textBold(),
-                      ),
-                    ),
-                  ],
-                ),
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ],
               ),
             ),
           ),
@@ -88,6 +83,13 @@ class Components {
               return ProductCartScreen();
             }));
           }, Icons.shopping_bag_outlined, 'Cart'),
+
+          // Navigate to the Product Favourite Screen
+          _listTileComponent(context, () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return ProductFavScreen();
+            }));
+          }, Icons.favorite_outline, 'Favorite'),
 
           // Navigate to the ReviewScreen
           _listTileComponent(context, () {

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shopbiz_app/constants/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -18,16 +17,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   File? _pickedImage;
   final TextEditingController _nameController = TextEditingController();
-
-  Future<void> launcherLink() async {
-    final String _uri = 'https://www.facebook.com/';
-
-    final Uri _url = Uri.parse(_uri);
-
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,15 +93,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     _updateProfile(user.id);
                   },
-                ),
-                Divider(),
-                Card(
-                  child: TextButton(
-                    onPressed: () {
-                      launcherLink();
-                    },
-                    child: Text('Go to Facebook'),
-                  ),
                 ),
               ],
             );

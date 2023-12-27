@@ -41,3 +41,11 @@ class AppUtils {
 ///sizedbox custom
 ///not added in class to access quickly
 SizedBox sizedbox() => const SizedBox(height: 10);
+
+///navigation custom method
+///not added in class to access quickly
+navigateTo(BuildContext context, Widget nextScreen) {
+  Navigator.push(context, MaterialPageRoute(builder: (_) {
+    return nextScreen;
+  }));
+}

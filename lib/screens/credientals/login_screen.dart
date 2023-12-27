@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopbiz_app/constants/constants.dart';
 import 'package:shopbiz_app/screens/credientals/forget_password_screen.dart';
+import 'package:shopbiz_app/screens/credientals/login_with_phone_number.dart';
 import 'package:shopbiz_app/screens/credientals/signup_screen.dart';
 import 'package:shopbiz_app/screens/home/home_screen.dart';
 import 'package:shopbiz_app/widgets/account_selection.dart';
@@ -24,6 +26,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isObscureText = true;
   bool _isLoading = false; // Add this variable to track loading state
+  GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<void> _loginCredentials() async {
     if (_formKey.currentState!.validate()) {
@@ -55,19 +58,27 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   ///signign with google
-  Future<void> signInWithGoogle() async {
+  Future<UserCredential?> _handleGoogleSignIn() async {
     try {
-      GoogleSignIn googleSignIn = GoogleSignIn();
-      await googleSignIn.signIn();
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return HomeScreen();
-      }));
-    } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+        return await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+    } catch (error) {
+      print(error);
     }
+    return null;
   }
 
-  Future<void> signOutWithGoogle() async {
+  Future<void> _handleGoogleSignOut() async {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn();
       await googleSignIn.signOut();
@@ -96,7 +107,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   Form(
                     key: _formKey,
                     child: Container(
-                      height: size.height * 0.90,
+                      height: size.height * 1.0,
                       width: size.width,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -166,12 +177,31 @@ class _LogInScreenState extends State<LogInScreen> {
                                           _loginCredentials();
                                         },
                                 ),
+
+                          ///google auth button
                           GoogleAuthButton(
                             onPressed: () async {
                               print('signin');
-                              await signInWithGoogle();
+                              await _handleGoogleSignIn();
                             },
                           ),
+
+                          ///login with phone number button
+                          Card(
+                            child: Container(
+                              width: size.width,
+                              child: TextButton.icon(
+                                icon: CircleAvatar(child: Icon(Icons.phone)),
+                                onPressed: () {
+                                  navigateTo(context, LogInWithPhoneNumber());
+                                },
+                                label: Text(
+                                  "Sign in with phone",
+                                ),
+                              ),
+                            ),
+                          ),
+
                           Align(
                             alignment: Alignment.bottomRight,
                             child: TextButton(

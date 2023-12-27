@@ -4,7 +4,8 @@ class ProductModel {
   final String description;
   final double price;
   final String imageUrl;
-  bool isInCart; // New property
+  bool isInCart; // Existing property
+  bool isInFavorite; // New property
 
   // Constructor
   ProductModel({
@@ -14,6 +15,7 @@ class ProductModel {
     required this.price,
     required this.imageUrl,
     this.isInCart = false, // Default value
+    this.isInFavorite = false, // Default value
   });
 
   // Factory method to create an instance from a map (e.g., from JSON)
@@ -24,7 +26,8 @@ class ProductModel {
       description: json['description'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       imageUrl: json['imageUrl'] ?? '',
-      isInCart: json['isInCart'] ?? false, // Added property
+      isInCart: json['isInCart'] ?? false, // Existing property
+      isInFavorite: json['isInFavorite'] ?? false, // New property
     );
   }
 
@@ -36,14 +39,15 @@ class ProductModel {
       'description': description,
       'price': price,
       'imageUrl': imageUrl,
-      'isInCart': isInCart, // Added property
+      'isInCart': isInCart, // Existing property
+      'isInFavorite': isInFavorite, // New property
     };
   }
 
   // Override toString for better debugging
   @override
   String toString() {
-    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, imageUrl: $imageUrl, isInCart: $isInCart)';
+    return 'ProductModel(id: $id, name: $name, description: $description, price: $price, imageUrl: $imageUrl, isInCart: $isInCart, isInFavorite: $isInFavorite)';
   }
 
   // Override == for equality comparison
@@ -57,7 +61,8 @@ class ProductModel {
           description == other.description &&
           price == other.price &&
           imageUrl == other.imageUrl &&
-          isInCart == other.isInCart;
+          isInCart == other.isInCart &&
+          isInFavorite == other.isInFavorite;
 
   // Override hashCode for consistency with ==
   @override
@@ -67,9 +72,6 @@ class ProductModel {
       description.hashCode ^
       price.hashCode ^
       imageUrl.hashCode ^
-      isInCart.hashCode;
+      isInCart.hashCode ^
+      isInFavorite.hashCode;
 }
-
-/*
-
-*/

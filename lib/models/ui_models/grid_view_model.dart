@@ -23,10 +23,10 @@ final List<GridViewModel> gridModel = [
 class GridViewModelColors {
 // list of colors
   static List<Color> gridViewModelCardColors = [
-    Colors.red,
     Colors.blue,
-    Colors.pink,
+    Colors.red,
     Colors.yellow,
+    Colors.pink,
   ];
 }
 
