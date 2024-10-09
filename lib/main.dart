@@ -1,6 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/screens/user_screens/user_activity_cycle.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:shopbiz_app/core/constants/app_colors.dart';
+import 'package:shopbiz_app/core/routes/app_routes.dart';
+import 'package:shopbiz_app/ui/screens/on_boarding/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,43 +17,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return MaterialApp(
-      ///title
-      title: 'Shopbiz',
-
-      ///debugShowCheckedModeBanner
       debugShowCheckedModeBanner: false,
-
-      ///theme
+      title: 'Shopbiz',
       theme: ThemeData(
-        ///colorScheme
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-
-        ///cardTheme
-        cardTheme: const CardTheme(color: Colors.white),
-
-        ///primaryColor
-        primaryColor: Colors.deepPurple,
-
-        ///fontFamily
-        fontFamily: 'roboto',
-
-        ///app bar theme
-        appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.deepPurple,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-          ),
-        ),
-
-        ///useMaterial3
-        useMaterial3: true,
+          cardColor: AppColors.kWhiteColor,
+          appBarTheme: AppBarTheme(
+              iconTheme: IconThemeData(color: AppColors.kWhiteColor),
+              backgroundColor: AppColors.kPrimaryColor,
+              titleTextStyle:
+                  TextStyle(color: AppColors.kWhiteColor, fontSize: 17.0)),
+          scaffoldBackgroundColor: AppColors.kWhiteColor,
+          textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
+          useMaterial3: true),
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        child: child!,
+        breakpoints: [
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          Breakpoint(start: 1921, end: size.width, name: '4K'),
+        ],
       ),
-
-      ///home initial screen
-      home: const UserActivityCycleScreen(),
+      routes: AppRoutes.routes,
+      home: const SplashScreen(),
     );
   }
 }
