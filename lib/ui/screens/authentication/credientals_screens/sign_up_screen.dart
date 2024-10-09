@@ -37,12 +37,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 formKey: formKey,
               )
             : SignUpMobileView(
-                emailEditingController: emailEditingController,
-                nameEditingController: nameEditingController,
-                lastNameEditingController: lastNameEditingController,
-                passwordEditingController: passwordEditingController,
-                rePassEditingController: rePassEditingController,
-                phoneEditingController: phoneEditingController,
+                nameController: nameEditingController,
+                emailController: emailEditingController,
+                passwordController: passwordEditingController,
+                rePasswordController: rePassEditingController,
+                phoneNumberController: phoneEditingController,
                 formKey: formKey,
               ));
   }

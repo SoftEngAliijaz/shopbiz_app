@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
 import 'package:shopbiz_app/core/routes/app_routes.dart';
-import 'package:shopbiz_app/ui/screens/app_main/home/home_screen.dart';
+import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +41,6 @@ class MyApp extends StatelessWidget {
               ],
             ),
         routes: AppRoutes.routes,
-        home: const HomeScreen());
+        home: const LogInScreen());
   }
 }

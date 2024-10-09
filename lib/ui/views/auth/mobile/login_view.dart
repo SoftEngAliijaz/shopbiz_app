@@ -35,9 +35,7 @@ class _LogInMobileViewState extends State<LogInMobileView> {
 
     return Stack(
       children: [
-        // Background gradient shape
         AuthCircleDiv(size: size),
-
         SingleChildScrollView(
           child: Column(
             children: [
