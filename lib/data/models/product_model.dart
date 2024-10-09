@@ -1,6 +1,7 @@
 class ProductModel {
   final String id;
   final String name;
+  final String imageUrl;
   final String description;
   final int quantity;
   final String brand;
@@ -13,6 +14,7 @@ class ProductModel {
   ProductModel({
     required this.id,
     required this.name,
+    required this.imageUrl,
     required this.description,
     required this.quantity,
     required this.brand,
@@ -27,6 +29,7 @@ class ProductModel {
     return ProductModel(
       id: json['id'],
       name: json['name'],
+      imageUrl: json['imageUrl'],
       description: json['description'],
       quantity: json['quantity'],
       brand: json['brand'],
@@ -42,6 +45,7 @@ class ProductModel {
     return {
       'id': id,
       'name': name,
+      'imageUrl': imageUrl,
       'description': description,
       'quantity': quantity,
       'brand': brand,

@@ -35,6 +35,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ProductModel newProduct = ProductModel(
         id: productId,
         name: nameController.text,
+        imageUrl: '',
         description: descriptionController.text,
         quantity: int.parse(quantityController.text),
         brand: brandController.text,

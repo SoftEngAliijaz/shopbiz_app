@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/core/constants/app_colors.dart';
-import 'package:shopbiz_app/ui/widgets/admin/carousel_card.dart';
+import 'package:shopbiz_app/data/models/product_ui_model.dart';
 import 'package:shopbiz_app/ui/widgets/admin/user_info_card.dart';
+import 'package:shopbiz_app/ui/widgets/app/carousel_slider_widget.dart';
 import 'package:shopbiz_app/ui/widgets/app/user_drawer.dart';
 import 'package:shopbiz_app/ui/widgets/products/product_card.dart';
+import 'package:shopbiz_app/ui/widgets/products/product_card_title.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,20 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -54,19 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 const SizedBox(height: 10),
 
-                // Horizontal Carousel
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: const [
-                      CarouselCardWidget(),
-                      CarouselCardWidget(),
-                      CarouselCardWidget(),
-                      CarouselCardWidget(),
-                      CarouselCardWidget(),
-                    ],
-                  ),
-                ),
+                CarouselSliderWidget(),
 
                 const SizedBox(height: 10),
                 // Products Section
@@ -80,30 +55,17 @@ class _HomeScreenState extends State<HomeScreen>
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      ProductCard(
-                        imageUrl:
-                            'https://images.pexels.com/photos/36029/aroni-arsa-children-little.jpg?cs=srgb&dl=pexels-pixabay-36029.jpg&fm=jpg',
-                        title: 'Product Name',
-                        price: 1500,
-                        onAddToCart: () {},
-                        size: size,
-                      ),
-                      ProductCard(
-                        imageUrl:
-                            'https://images.pexels.com/photos/36029/aroni-arsa-children-little.jpg?cs=srgb&dl=pexels-pixabay-36029.jpg&fm=jpg',
-                        title: 'Product Name',
-                        price: 1500,
-                        onAddToCart: () {},
-                        size: size,
-                      ),
-                      ProductCard(
-                        imageUrl:
-                            'https://images.pexels.com/photos/36029/aroni-arsa-children-little.jpg?cs=srgb&dl=pexels-pixabay-36029.jpg&fm=jpg',
-                        title: 'Product Name',
-                        price: 1500,
-                        onAddToCart: () {},
-                        size: size,
-                      ),
+                      ...productUiModel.map((v) {
+                        return ProductCard(
+                          imageUrl: '${v.imageUrl}',
+                          title: '${v.name}',
+                          description: '${v.description}',
+                          price: v.price,
+                          category: '${v.category}',
+                          size: size,
+                          onPressed: () {},
+                        );
+                      }).toList()
                     ],
                   ),
                 ),
@@ -117,30 +79,17 @@ class _HomeScreenState extends State<HomeScreen>
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      ProductCard(
-                        imageUrl:
-                            'https://images.pexels.com/photos/36029/aroni-arsa-children-little.jpg?cs=srgb&dl=pexels-pixabay-36029.jpg&fm=jpg',
-                        title: 'Product Name',
-                        price: 1500,
-                        onAddToCart: () {},
-                        size: size,
-                      ),
-                      ProductCard(
-                        imageUrl:
-                            'https://images.pexels.com/photos/36029/aroni-arsa-children-little.jpg?cs=srgb&dl=pexels-pixabay-36029.jpg&fm=jpg',
-                        title: 'Product Name',
-                        price: 1500,
-                        onAddToCart: () {},
-                        size: size,
-                      ),
-                      ProductCard(
-                        imageUrl:
-                            'https://images.pexels.com/photos/36029/aroni-arsa-children-little.jpg?cs=srgb&dl=pexels-pixabay-36029.jpg&fm=jpg',
-                        title: 'Product Name',
-                        price: 1500,
-                        onAddToCart: () {},
-                        size: size,
-                      ),
+                      ...productUiModel.map((v) {
+                        return ProductCard(
+                          imageUrl: '${v.imageUrl}',
+                          title: '${v.name}',
+                          description: '${v.description}',
+                          price: v.price,
+                          category: '${v.category}',
+                          onPressed: () {},
+                          size: size,
+                        );
+                      }).toList()
                     ],
                   ),
                 ),
@@ -148,32 +97,6 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ProductCardTitle extends StatelessWidget {
-  final String title;
-  final void Function()? onPressed;
-
-  const ProductCardTitle({
-    super.key,
-    required this.title,
-    this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        title,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-      ),
-      trailing: TextButton(
-        onPressed: onPressed,
-        child:
-            Text("View all", style: TextStyle(color: AppColors.kPrimaryColor)),
       ),
     );
   }
