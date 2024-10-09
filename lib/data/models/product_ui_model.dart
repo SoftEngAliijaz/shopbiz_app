@@ -6,6 +6,7 @@ class ProductUiModel {
   final String imageUrl;
   final String category;
 
+  ///jkhkajsdh
   ProductUiModel({
     required this.id,
     required this.name,
