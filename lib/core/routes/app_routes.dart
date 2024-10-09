@@ -28,5 +28,6 @@ class AppRoutes {
     '/terms-condition': (context) => const TermsConditionsScreen(),
     '/profile-screen': (context) => const ProfileScreen(),
     '/review-screen': (context) => const ReviewScreen(),
+    '/admin': (context) => const AdminDashboardScreen(),
   };
 }

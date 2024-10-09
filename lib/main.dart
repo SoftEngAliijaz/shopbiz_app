@@ -19,29 +19,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Shopbiz',
-      theme: ThemeData(
-          cardColor: AppColors.kWhiteColor,
-          appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(color: AppColors.kWhiteColor),
-              backgroundColor: AppColors.kPrimaryColor,
-              titleTextStyle:
-                  TextStyle(color: AppColors.kWhiteColor, fontSize: 17.0)),
-          scaffoldBackgroundColor: AppColors.kWhiteColor,
-          textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
-          useMaterial3: true),
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
-        breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          Breakpoint(start: 1921, end: size.width, name: '4K'),
-        ],
-      ),
-      routes: AppRoutes.routes,
-      home: const SplashScreen(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Shopbiz',
+        theme: ThemeData(
+            cardColor: AppColors.kWhiteColor,
+            appBarTheme: AppBarTheme(
+                iconTheme: IconThemeData(color: AppColors.kWhiteColor),
+                backgroundColor: AppColors.kPrimaryColor,
+                titleTextStyle:
+                    TextStyle(color: AppColors.kWhiteColor, fontSize: 17.0)),
+            scaffoldBackgroundColor: AppColors.kWhiteColor,
+            textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
+            useMaterial3: true),
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+              child: child!,
+              breakpoints: [
+                const Breakpoint(start: 0, end: 450, name: MOBILE),
+                const Breakpoint(start: 451, end: 800, name: TABLET),
+                const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+                Breakpoint(start: 1921, end: size.width, name: '4K'),
+              ],
+            ),
+        routes: AppRoutes.routes,
+        home: const SplashScreen());
   }
 }
