@@ -68,7 +68,7 @@ class _LogInMobileViewState extends State<LogInMobileView> {
                           SizedBox(height: size.height * 0.03),
 
                           // Welcome text
-                          Text('Welcome Back auth',
+                          Text('Welcome Back',
                               style: TextStyle(
                                   color: AppColors.kBlackColor,
                                   fontSize: size.width * 0.06)),
