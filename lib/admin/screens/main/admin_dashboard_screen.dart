@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/ui/widgets/admin/carousel_card.dart';
 import 'package:shopbiz_app/ui/widgets/admin/user_info_card.dart';
+import 'package:shopbiz_app/ui/widgets/app/carousel_slider_widget.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -16,18 +16,7 @@ class AdminDashboardScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Column(
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    CarouselCardWidget(),
-                    CarouselCardWidget(),
-                    CarouselCardWidget(),
-                    CarouselCardWidget(),
-                    CarouselCardWidget(),
-                  ],
-                ),
-              ),
+              CarouselSliderWidget(),
               const SizedBox(height: 10.0),
               UserInfoCard(
                 title: 'Trickster as (Admin)',
