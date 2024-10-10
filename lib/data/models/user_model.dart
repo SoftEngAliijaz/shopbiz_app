@@ -1,11 +1,20 @@
 import 'dart:convert';
 
 class UserModel {
+  ///also change their data type
+  /// i mean for phone we need int
   String uid;
   String name;
   String email;
   String profilePic;
+
+  ///change to int
   String phoneNumber;
+
+  /// String isType;
+  /// (2) types
+  /// 1. Admin
+  /// 2. User
 
   UserModel({
     required this.uid,
