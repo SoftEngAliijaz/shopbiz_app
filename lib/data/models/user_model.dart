@@ -1,35 +1,46 @@
-class UsersModel {
-  String? createdAt;
-  String? name;
-  String? avatar;
-  String? updatedAt;
-  String? email;
-  String? city;
-  String? id;
-  String? phone;
-  String? job;
+import 'dart:convert';
 
-  UsersModel({
-    this.createdAt,
-    this.name,
-    this.avatar,
-    this.updatedAt,
-    this.email,
-    this.city,
-    this.id,
-    this.phone,
-    this.job,
+class UserModel {
+  String uid;
+  String name;
+  String email;
+  String profilePic;
+  String phoneNumber;
+
+  UserModel({
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.profilePic,
+    required this.phoneNumber,
   });
 
-  UsersModel.fromJson(Map<String, dynamic> json) {
-    createdAt = json['createdAt'];
-    name = json['name'];
-    avatar = json['avatar'];
-    updatedAt = json['updatedAt'];
-    email = json['email'];
-    city = json['city'];
-    id = json['id'];
-    phone = json['phone'];
-    job = json['job'];
+  // Method to convert UserModel to a map (for Firebase)
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'name': name,
+      'email': email,
+      'profilePic': profilePic,
+      'phoneNumber': phoneNumber,
+    };
   }
+
+  // Method to create a UserModel from a map (for Firebase)
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      uid: map['uid'],
+      name: map['name'],
+      email: map['email'],
+      profilePic: map['profilePic'],
+      phoneNumber: map['phoneNumber'],
+    );
+  }
+
+  // Method to convert UserModel to a JSON string
+  String toJson() => json.encode(toMap());
+
+  // Method to create a UserModel from a JSON string
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 }

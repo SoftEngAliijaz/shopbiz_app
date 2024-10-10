@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
 import 'package:shopbiz_app/core/constants/app_constants.dart';
 import 'package:shopbiz_app/data/data_source/user_table_data_source.dart';
-import 'package:shopbiz_app/data/models/user_model.dart';
+import 'package:shopbiz_app/data/models/user_ui_model.dart';
 import 'package:http/http.dart' as http;
 
 class ViewAllUsersScreen extends StatefulWidget {
@@ -14,7 +14,7 @@ class ViewAllUsersScreen extends StatefulWidget {
 }
 
 class _ViewAllUsersScreenState extends State<ViewAllUsersScreen> {
-  List<UsersModel> users = [];
+  List<UserUIModel> users = [];
   int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   bool isLoading = true;
 
@@ -30,7 +30,7 @@ class _ViewAllUsersScreenState extends State<ViewAllUsersScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       setState(() {
-        users = jsonData.map((json) => UsersModel.fromJson(json)).toList();
+        users = jsonData.map((json) => UserUIModel.fromJson(json)).toList();
         isLoading = false;
       });
     } else {

@@ -1,37 +1,17 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shopbiz_app/core/constants/app_colors.dart';
-import 'package:shopbiz_app/data/models/auth_model.dart';
+import 'package:shopbiz_app/data/models/user_model.dart';
 import 'package:shopbiz_app/ui/screens/app_main/home/home_screen.dart';
-import 'package:shopbiz_app/ui/widgets/app/text_form_field.dart';
-import 'package:shopbiz_app/ui/widgets/auth/auth_circle_div.dart';
-import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 
 class SignUpMobileView extends StatefulWidget {
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final TextEditingController rePasswordController;
-  final TextEditingController phoneNumberController;
-  final GlobalKey<FormState> formKey;
-
-  SignUpMobileView({
-    Key? key,
-    required this.nameController,
-    required this.emailController,
-    required this.passwordController,
-    required this.rePasswordController,
-    required this.phoneNumberController,
-    required this.formKey,
-  }) : super(key: key);
-
   @override
-  State<SignUpMobileView> createState() => _SignUpMobileViewState();
+  _SignUpMobileViewState createState() => _SignUpMobileViewState();
 }
 
 class _SignUpMobileViewState extends State<SignUpMobileView> {
@@ -39,49 +19,84 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
   bool _isObscurePassword2 = true;
   bool _isLoading = false;
   File? _image;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController1 = TextEditingController();
+  final TextEditingController passwordController2 = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  Future<void> _signUpCredentials(BuildContext context) async {
+    String email = emailController.text;
+    String password = passwordController1.text;
+    String name = nameController.text;
+    String phoneNumber = phoneController.text;
 
-  _signUpCredentials() async {
+    setState(() {
+      _isLoading = true; // Start loading state
+    });
+
     try {
-      UserCredential userCredential =
+      // Create user with email and password
+      final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: widget.emailController.text,
-        password: widget.passwordController.text,
+        email: email,
+        password: password,
       );
 
+      // Get the ID token for the user
+      String? idToken = await userCredential.user?.getIdToken();
+
+      // Optionally upload the user's photo
       String? photoUrl;
       if (_image != null) {
         photoUrl = await _uploadImage();
       }
 
-      AuthModel userModel = AuthModel(
+      // Create the UserModel
+      UserModel userModel = UserModel(
         uid: userCredential.user!.uid,
-        email: widget.emailController.text,
-        displayName: widget.nameController.text,
-        phoneNumber: int.parse(widget.phoneNumberController.text),
-        photoUrl: photoUrl,
+        name: name,
+        email: email,
+        profilePic: photoUrl ??
+            'https://images.pexels.com/photos/35537/child-children-girl-happy.jpg',
+        phoneNumber: phoneNumber,
       );
 
+      // Store user details along with the ID token in Firestore
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userCredential.user!.uid)
-          .set(userModel.toJson());
+          .set({
+        ...userModel.toMap(), // Use the UserModel's toMap method
+        'idToken': idToken, // Store the token
+      });
 
+      // Show success message and navigate to home screen
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Sign-up successful!"),
-        ),
+        const SnackBar(content: Text("Sign-up successful!")),
       );
 
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return HomeScreen();
-      }));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => HomeScreen()));
     } on FirebaseAuthException catch (e) {
+      // Handle sign-up errors
+      String errorMessage;
+
+      if (e.code == 'email-already-in-use') {
+        errorMessage =
+            "This email address is already in use. Please try another one.";
+        // Optionally redirect to login screen
+      } else {
+        errorMessage = "Error: ${e.message}";
+      }
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage)));
+    } catch (e) {
+      // Handle any other errors
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error: ${e.message}"),
-        ),
-      );
+          SnackBar(content: Text("An unexpected error occurred.")));
     } finally {
+      // End the loading state
       setState(() {
         _isLoading = false;
       });
@@ -89,15 +104,17 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
   }
 
   Future<String?> _uploadImage() async {
+    if (_image == null) return null; // Return null if no image is selected
+
     try {
       Reference ref = FirebaseStorage.instance
           .ref()
           .child('user_profile_pictures')
-          .child('${widget.emailController.text}_profile_picture.jpg');
+          .child('${emailController.text.trim()}_profile_picture.jpg');
 
       UploadTask uploadTask = ref.putFile(_image!);
 
-      await uploadTask.whenComplete(() => null);
+      await uploadTask;
 
       String downloadUrl = await ref.getDownloadURL();
 
@@ -123,466 +140,82 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: [
-          AuthCircleDiv(size: size),
-          Container(
-            height: size.height,
-            width: size.width,
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Container(
-                height: size.height,
-                width: size.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    color: AppColors.kPrimaryColor.withOpacity(0.2),
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Column(
-                          children: [
-                            Form(
-                              key: widget.formKey,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(height: 10),
-                                  Container(
-                                    child: Text(
-                                      'Welcome to shopbiz\nPlease Sign up to Your Account',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 20.0),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  GestureDetector(
-                                    onTap: _getImage,
-                                    child: CircleAvatar(
-                                      radius: 80,
-                                      backgroundColor: _image == null
-                                          ? AppColors.kPrimaryColor
-                                          : AppColors.kBlueColor,
-                                      child: _image == null
-                                          ? Center(
-                                              child: Icon(
-                                                  Icons.camera_alt_outlined,
-                                                  color: AppColors.kWhiteColor))
-                                          : null,
-                                      backgroundImage: _image != null
-                                          ? FileImage(_image!)
-                                          : null,
-                                    ),
-                                  ),
-                                  CustomTextField(
-                                    textEditingController:
-                                        widget.nameController,
-                                    keyboardType: TextInputType.name,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter your name';
-                                      }
-                                      return null;
-                                    },
-                                    prefixIcon: Icons.person_outline,
-                                    hintText: 'Name',
-                                  ),
-
-                                  CustomTextField(
-                                    textEditingController:
-                                        widget.emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter your email';
-                                      } else if (!value.contains('@')) {
-                                        return 'Please enter a valid email';
-                                      }
-                                      return null;
-                                    },
-                                    prefixIcon: Icons.email_outlined,
-                                    hintText: 'Email',
-                                  ),
-
-                                  CustomTextField(
-                                    textEditingController:
-                                        widget.phoneNumberController,
-                                    keyboardType: TextInputType.phone,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter your phone number';
-                                      } else if (value.length != 10) {
-                                        return 'Please enter a valid phone number with 11 digits';
-                                      }
-                                      return null;
-                                    },
-                                    prefixIcon: Icons.phone_android_outlined,
-                                    // prefixText: '+92',
-                                    hintText: 'Phone Number',
-                                  ),
-
-                                  ///password fields
-                                  CustomTextField(
-                                    textEditingController:
-                                        widget.passwordController,
-                                    keyboardType: TextInputType.visiblePassword,
-                                    obscureText: _isObscurePassword1,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter a password';
-                                      } else if (value.length < 6) {
-                                        return 'Password must be at least 6 characters';
-                                      }
-                                      return null;
-                                    },
-                                    prefixIcon: Icons.password,
-                                    hintText: 'Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isObscurePassword1 =
-                                              !_isObscurePassword1;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        _isObscurePassword1
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                      ),
-                                    ),
-                                  ),
-                                  CustomTextField(
-                                    textEditingController:
-                                        widget.rePasswordController,
-                                    keyboardType: TextInputType.visiblePassword,
-                                    obscureText: _isObscurePassword2,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please re-enter your password';
-                                      } else if (value !=
-                                          widget.passwordController.text) {
-                                        return 'Passwords do not match';
-                                      }
-                                      return null;
-                                    },
-                                    prefixIcon: Icons.password,
-                                    hintText: 'Re-enter Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isObscurePassword2 =
-                                              !_isObscurePassword2;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        _isObscurePassword2
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                      ),
-                                    ),
-                                  ),
-                                  CustomButton(
-                                    title: _isLoading
-                                        ? 'Signing Up...'
-                                        : 'Sign Up',
-                                    onPressed: _isLoading
-                                        ? null
-                                        : () {
-                                            if (_image == null) {
-                                              Fluttertoast.showToast(
-                                                  msg: 'Please Select Image');
-                                            } else {
-                                              _signUpCredentials();
-                                            }
-                                          },
-                                  ),
-
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text("Already have account?"),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: AppColors.kWhiteColor
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: Text("Sign In"),
-                                            ),
-                                          ),
-                                        ),
-                                      ]),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+      appBar: AppBar(title: Text("Sign Up")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: "Name"),
+              ),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: "Email"),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              TextField(
+                controller: passwordController1,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  suffixIcon: IconButton(
+                    icon: Icon(_isObscurePassword1
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isObscurePassword1 = !_isObscurePassword1;
+                      });
+                    },
                   ),
                 ),
+                obscureText: _isObscurePassword1,
               ),
-            ),
+              TextField(
+                controller: passwordController2,
+                decoration: InputDecoration(
+                  labelText: "Confirm Password",
+                  suffixIcon: IconButton(
+                    icon: Icon(_isObscurePassword2
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isObscurePassword2 = !_isObscurePassword2;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: _isObscurePassword2,
+              ),
+              TextField(
+                controller: phoneController,
+                decoration: InputDecoration(labelText: "Phone Number"),
+                keyboardType: TextInputType.phone,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _signUpCredentials(context);
+                },
+                child:
+                    _isLoading ? CircularProgressIndicator() : Text("Sign Up"),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _getImage,
+                child: Text("Pick Profile Picture"),
+              ),
+              if (_image != null) ...[
+                SizedBox(height: 20),
+                Image.file(_image!, height: 100), // Display selected image
+              ],
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
-
-
-//import 'package:flutter/material.dart';
-// import 'package:shopbiz_app/core/constants/app_colors.dart';
-// import 'package:shopbiz_app/data/repositories/auth_repository.dart';
-// import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
-// import 'package:shopbiz_app/ui/widgets/app/error_dialog.dart';
-// import 'package:shopbiz_app/ui/widgets/app/text_form_field.dart';
-// import 'package:shopbiz_app/ui/widgets/auth/auth_circle_div.dart';
-// import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
-
-// class SignUpMobileView extends StatefulWidget {
-//   const SignUpMobileView({
-//     super.key,
-//     required this.emailEditingController,
-//     required this.nameEditingController,
-//     required this.lastNameEditingController,
-//     required this.passwordEditingController,
-//     required this.rePassEditingController,
-//     required this.phoneEditingController,
-//     required this.formKey,
-//   });
-
-//   final TextEditingController emailEditingController;
-//   final GlobalKey<FormState> formKey;
-//   final TextEditingController lastNameEditingController;
-//   final TextEditingController nameEditingController;
-//   final TextEditingController passwordEditingController;
-//   final TextEditingController phoneEditingController;
-//   final TextEditingController rePassEditingController;
-
-//   @override
-//   State<SignUpMobileView> createState() => _SignUpMobileViewState();
-// }
-
-// class _SignUpMobileViewState extends State<SignUpMobileView> {
-//   bool _isPasswordObscured = true;
-//   bool _rePasswordObscured = true;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final Size size = MediaQuery.of(context).size;
-//     return Stack(
-//       children: [
-//         // Background shape for aesthetics (optional)
-//         AuthCircleDiv(size: size),
-//         SingleChildScrollView(
-//           child: Container(
-//             padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-//             child: Container(
-//               decoration: BoxDecoration(
-//                   color: AppColors.kPrimaryColor.withOpacity(0.2)),
-//               child: Form(
-//                 key: widget.formKey,
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(right: 10.0, left: 10.0),
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       SizedBox(
-//                           height:
-//                               size.height * 0.15), // Adjust to fit under shape
-//                       Container(
-//                         height: size.height * 0.15,
-//                         width: size.width * 0.15,
-//                         decoration: const BoxDecoration(
-//                           image: DecorationImage(
-//                             image: AssetImage('assets/logos/main_logo.png'),
-//                           ),
-//                         ),
-//                       ),
-//                       SizedBox(height: size.height * 0.02),
-//                       Text(
-//                         'Create New Account',
-//                         style: TextStyle(
-//                             color: AppColors.kBlackColor,
-//                             fontSize: size.width * 0.06),
-//                       ),
-//                       Text(
-//                         'Set up your user name and password\nYou can always change it later',
-//                         textAlign: TextAlign.center,
-//                         style: TextStyle(
-//                             color: AppColors.kGreyColor,
-//                             fontSize: size.width * 0.035),
-//                       ),
-//                       SizedBox(height: size.height * 0.05),
-
-//                       // Name TextField
-//                       CustomTextField(
-//                         validator: (v) {
-//                           if (v!.isEmpty) {
-//                             return 'Field should not be empty ';
-//                           }
-//                           return null;
-//                         },
-//                         hintText: 'First Name',
-//                         textEditingController: widget.nameEditingController,
-//                         prefixIcon: Icons.person_outline,
-//                       ),
-//                       SizedBox(height: size.height * 0.02),
-
-//                       // Last Name TextField
-//                       CustomTextField(
-//                         validator: (v) {
-//                           if (v!.isEmpty) {
-//                             return 'Field should not be empty ';
-//                           }
-//                           return null;
-//                         },
-//                         hintText: 'Last Name',
-//                         textEditingController: widget.lastNameEditingController,
-//                         prefixIcon: Icons.person_outline,
-//                       ),
-//                       SizedBox(height: size.height * 0.02),
-
-//                       // Phone TextField
-//                       CustomTextField(
-//                         validator: (v) {
-//                           if (v!.isEmpty) {
-//                             return 'Field should not be empty ';
-//                           }
-//                           return null;
-//                         },
-//                         hintText: 'Phone Number',
-//                         textEditingController: widget.phoneEditingController,
-//                         prefixIcon: Icons.phone_outlined,
-//                       ),
-//                       SizedBox(height: size.height * 0.02),
-
-//                       // Email TextField
-//                       CustomTextField(
-//                         validator: (v) {
-//                           if (v!.isEmpty) {
-//                             return 'Field should not be empty ';
-//                           } else if (!isValidEmail(v)) {
-//                             return 'Enter a valid email';
-//                           }
-//                           return null;
-//                         },
-//                         hintText: 'Email',
-//                         textEditingController: widget.emailEditingController,
-//                         prefixIcon: Icons.email_outlined,
-//                       ),
-//                       SizedBox(height: size.height * 0.02),
-
-//                       // Password TextField
-//                       CustomTextField(
-//                         validator: (v) {
-//                           if (v!.isEmpty) {
-//                             return 'Field should not be empty ';
-//                           } else if (v.length < 6) {
-//                             return '  password should contain 6 digits ';
-//                           }
-//                           return null;
-//                         },
-//                         obscureText: _isPasswordObscured,
-//                         hintText: 'Password',
-//                         textEditingController: widget.passwordEditingController,
-//                         prefixIcon: Icons.lock_outline,
-//                         suffixIcon: IconButton(
-//                           onPressed: () {
-//                             setState(() {
-//                               _isPasswordObscured = !_isPasswordObscured;
-//                             });
-//                           },
-//                           icon: Icon(_isPasswordObscured
-//                               ? Icons.visibility_off
-//                               : Icons.visibility),
-//                         ),
-//                       ),
-//                       SizedBox(height: size.height * 0.02),
-
-//                       // Re-enter Password TextField
-//                       CustomTextField(
-//                         validator: (v) {
-//                           if (v!.isEmpty) {
-//                             return 'Field should not be empty ';
-//                           } else if (v.length < 6) {
-//                             return '  password should contain 6 digits ';
-//                           }
-//                           return null;
-//                         },
-//                         obscureText: _rePasswordObscured,
-//                         hintText: 'Re-enter Password',
-//                         textEditingController: widget.rePassEditingController,
-//                         prefixIcon: Icons.lock_outline,
-//                         suffixIcon: IconButton(
-//                           onPressed: () {
-//                             setState(() {
-//                               _rePasswordObscured = !_rePasswordObscured;
-//                             });
-//                           },
-//                           icon: Icon(_rePasswordObscured
-//                               ? Icons.visibility_off
-//                               : Icons.visibility),
-//                         ),
-//                       ),
-//                       SizedBox(height: size.height * 0.05),
-
-//                       // Sign Up Button
-//                       CustomButton(
-//                         title: 'Sign Up',
-//                         onPressed: () async {
-//                           await AuthRepository().signUpFormSubmission();
-//                         },
-//                       ),
-//                       SizedBox(height: size.height * 0.01),
-
-//                       // Log In Text Button
-//                       Row(
-//                         mainAxisAlignment: MainAxisAlignment.center,
-//                         children: [
-//                           Text(
-//                             'Already have an account?',
-//                             style: TextStyle(
-//                                 color: AppColors.kBlackColor,
-//                                 fontSize: size.width * 0.03),
-//                           ),
-//                           TextButton(
-//                             onPressed: () {
-//                               Navigator.push(context,
-//                                   MaterialPageRoute(builder: (_) {
-//                                 return const LogInScreen();
-//                               }));
-//                             },
-//                             child: Text(
-//                               'Log In',
-//                               style: TextStyle(
-//                                   color: AppColors.kPrimaryColor,
-//                                   fontSize: size.width * 0.03),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

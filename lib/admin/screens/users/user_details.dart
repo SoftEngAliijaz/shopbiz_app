@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/data/models/user_model.dart';
+import 'package:shopbiz_app/data/models/user_ui_model.dart';
 import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 
 class UserDetailsScreen extends StatefulWidget {
-  final UsersModel user;
+  final UserUIModel user;
 
   const UserDetailsScreen({super.key, required this.user});
 

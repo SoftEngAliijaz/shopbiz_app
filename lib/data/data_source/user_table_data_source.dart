@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/admin/screens/users/user_details.dart';
-import 'package:shopbiz_app/data/models/user_model.dart';
+import 'package:shopbiz_app/data/models/user_ui_model.dart';
 
 class UsersDataTableSource extends DataTableSource {
-  final List<UsersModel> users;
+  final List<UserUIModel> users;
   final BuildContext context;
 
   UsersDataTableSource(this.users, this.context);
