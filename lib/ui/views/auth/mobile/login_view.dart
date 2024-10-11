@@ -6,8 +6,6 @@ import 'package:shopbiz_app/ui/widgets/app/error_dialog.dart';
 import 'package:shopbiz_app/ui/widgets/app/text_form_field.dart';
 import 'package:shopbiz_app/ui/widgets/auth/auth_circle_div.dart';
 import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
-import 'package:social_auth_buttons/res/buttons/facebook_auth_button.dart';
-import 'package:social_auth_buttons/res/buttons/google_auth_button.dart';
 
 class LogInMobileView extends StatefulWidget {
   final TextEditingController emailEditingController;
@@ -77,27 +75,6 @@ class _LogInMobileViewState extends State<LogInMobileView> {
                                 fontSize: size.width * 0.035),
                           ),
                           SizedBox(height: size.height * 0.05),
-
-                          // Facebook Log In
-                          FacebookAuthButton(
-                            padding: const EdgeInsets.all(10.0),
-                            buttonColor: AppColors.kWhiteColor,
-                            onPressed: () {},
-                            textStyle: TextStyle(
-                                fontSize: size.width * 0.04,
-                                color: AppColors.kBlackColor),
-                          ),
-                          SizedBox(height: size.height * 0.02),
-
-                          // Google Log In
-                          GoogleAuthButton(
-                            padding: const EdgeInsets.all(10.0),
-                            onPressed: () {},
-                            textStyle: TextStyle(
-                                color: AppColors.kBlackColor,
-                                fontSize: size.width * 0.04),
-                          ),
-                          SizedBox(height: size.height * 0.06),
 
                           // Email and Password fields
                           CustomTextField(

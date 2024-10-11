@@ -8,16 +8,7 @@ import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      // options: FirebaseOptions(
-      //     apiKey: "AIzaSyDmvzhrY_pwpzLfEfdnjvijTWYoiVTTO6o",
-      //     authDomain: "shopbiz-83a3c.firebaseapp.com",
-      //     projectId: "shopbiz-83a3c",
-      //     storageBucket: "shopbiz-83a3c.appspot.com",
-      //     messagingSenderId: "667766107143",
-      //     appId: "1:667766107143:web:eead0037a8565ca1568ea2",
-      //     measurementId: "G-WR2GF6EG1L"),
-      );
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
