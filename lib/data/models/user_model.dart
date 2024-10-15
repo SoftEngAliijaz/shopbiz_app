@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 class UserModel {
-  ///also change their data type
-  /// i mean for phone we need int
+ 
   String uid;
   String name;
   String email;
   String profilePic;
+  final bool isAdmin;
 
   ///change to int
-  String phoneNumber;
+  int phoneNumber;
 
   /// String isType;
   /// (2) types
@@ -22,6 +22,7 @@ class UserModel {
     required this.email,
     required this.profilePic,
     required this.phoneNumber,
+    this.isAdmin=false,
   });
 
   // Method to convert UserModel to a map (for Firebase)
@@ -32,6 +33,7 @@ class UserModel {
       'email': email,
       'profilePic': profilePic,
       'phoneNumber': phoneNumber,
+      'isAdmin':isAdmin,
     };
   }
 
@@ -43,6 +45,7 @@ class UserModel {
       email: map['email'],
       profilePic: map['profilePic'],
       phoneNumber: map['phoneNumber'],
+      isAdmin: map['isAdmin']??false,
     );
   }
 

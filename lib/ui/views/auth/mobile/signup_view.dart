@@ -6,8 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shopbiz_app/core/constants/app_colors.dart';
 import 'package:shopbiz_app/data/models/user_model.dart';
-import 'package:shopbiz_app/ui/screens/app_main/home/home_screen.dart';
+import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/admin_secret_key.dart';
+import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
 
 class SignUpMobileView extends StatefulWidget {
   @override
@@ -24,67 +26,108 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
   final TextEditingController passwordController2 = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  Future<void> _signUpCredentials(BuildContext context) async {
-    String email = emailController.text;
-    String password = passwordController1.text;
-    String name = nameController.text;
-    String phoneNumber = phoneController.text;
+  bool get isAdmin => _selectedOption == 1;
+  Future<void> _signUpCredentials(BuildContext context,
+      {required bool isAdmin}) async {
+    String email = emailController.text.trim();
+    String password = passwordController1.text.trim();
+    String name = nameController.text.trim();
+    String phoneNumber = phoneController.text.trim();
+
+    if (email.isEmpty ||
+        password.isEmpty ||
+        name.isEmpty ||
+        phoneNumber.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("All fields are required.")),
+      );
+      return;
+    }
+
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter a valid email address.")),
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Password must be at least 6 characters long.")),
+      );
+      return;
+    }
+
+    int? parsedPhoneNumber = int.tryParse(phoneNumber);
+    if (parsedPhoneNumber == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter a valid phone number.")),
+      );
+      return;
+    }
 
     setState(() {
-      _isLoading = true; // Start loading state
+      _isLoading = true;
     });
 
     try {
-      // Create user with email and password
+      if (isAdmin) {
+        bool isKeyValid = await showAdminKeyDialog(context, isLogin: false);
+        if (!isKeyValid) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("Invalid admin secret key. Sign-up canceled.")),
+          );
+          return;
+        }
+      }
+
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Get the ID token for the user
       String? idToken = await userCredential.user?.getIdToken();
 
-      // Optionally upload the user's photo
       String? photoUrl;
       if (_image != null) {
         photoUrl = await _uploadImage();
       }
 
-      // Create the UserModel
       UserModel userModel = UserModel(
         uid: userCredential.user!.uid,
         name: name,
         email: email,
         profilePic: photoUrl ??
             'https://images.pexels.com/photos/35537/child-children-girl-happy.jpg',
-        phoneNumber: phoneNumber,
+        phoneNumber: parsedPhoneNumber,
+        isAdmin: isAdmin,
       );
 
-      // Store user details along with the ID token in Firestore
+      String collectionName = isAdmin ? "admins" : "users";
+
       await FirebaseFirestore.instance
-          .collection("users")
+          .collection(collectionName)
           .doc(userCredential.user!.uid)
           .set({
-        ...userModel.toMap(), // Use the UserModel's toMap method
-        'idToken': idToken, // Store the token
+        ...userModel.toMap(),
+        'idToken': idToken,
       });
 
-      // Show success message and navigate to home screen
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Sign-up successful!")),
       );
 
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => HomeScreen()));
+          context, MaterialPageRoute(builder: (_) => LogInScreen()));
     } on FirebaseAuthException catch (e) {
-      // Handle sign-up errors
       String errorMessage;
 
       if (e.code == 'email-already-in-use') {
         errorMessage =
             "This email address is already in use. Please try another one.";
-        // Optionally redirect to login screen
       } else {
         errorMessage = "Error: ${e.message}";
       }
@@ -92,11 +135,9 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(errorMessage)));
     } catch (e) {
-      // Handle any other errors
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("An unexpected error occurred.")));
     } finally {
-      // End the loading state
       setState(() {
         _isLoading = false;
       });
@@ -104,7 +145,7 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
   }
 
   Future<String?> _uploadImage() async {
-    if (_image == null) return null; // Return null if no image is selected
+    if (_image == null) return null;
 
     try {
       Reference ref = FirebaseStorage.instance
@@ -138,6 +179,7 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
     }
   }
 
+  int _selectedOption = 2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,19 +232,48 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
                 ),
                 obscureText: _isObscurePassword2,
               ),
-              CheckboxMenuButton(
-                  value: true,
-                  onChanged: (v) {},
-
-                  ///if you want to user radio buttons you can
-                  /// if user selected "yes"
-                  /// it should show a field that will ask to enter a secret code that only admin knows
-                  /// if secretCode == 'IronMan'
-                  /// then it will check if admin enters correct secret code it will allow to use our app
-                  /// our app as a admin and also show Admin dashboard
-                  /// NOTE: (Secret Code for Admin SignUp & Admin Login will be different)
-                  /// make admin's collection separate and user's separate
-                  child: Text('Are you a admin')),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Radio<int>(
+                        activeColor: AppColors.kPrimaryColor,
+                        value: 1,
+                        groupValue: _selectedOption,
+                        onChanged: (int? value) {
+                          setState(() {
+                            _selectedOption = value!;
+                          });
+                        },
+                      ),
+                      Text('Admin'),
+                    ],
+                  ),
+                  SizedBox(width: 20),
+                  Column(
+                    children: [
+                      Radio<int>(
+                        activeColor: AppColors.kPrimaryColor,
+                        value: 2,
+                        groupValue: _selectedOption,
+                        onChanged: (int? value) {
+                          setState(() {
+                            _selectedOption = value!;
+                          });
+                        },
+                      ),
+                      Text('User'),
+                    ],
+                  ),
+                  // Add some space before the label
+                  // Expanded(
+                  //   child: Text(
+                  //     'Logging in as: ${_selectedOption == 1 ? 'Admin' : 'User'}',
+                  //     style: TextStyle(fontSize: 16),
+                  //   ),
+                  // ),
+                ],
+              ),
               TextField(
                 controller: phoneController,
                 decoration: InputDecoration(labelText: "Phone Number"),
@@ -211,7 +282,9 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  _signUpCredentials(context);
+                  bool isAdmin = _selectedOption == 1;
+
+                  _signUpCredentials(context, isAdmin: isAdmin);
                 },
                 child:
                     _isLoading ? CircularProgressIndicator() : Text("Sign Up"),
@@ -223,7 +296,7 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
               ),
               if (_image != null) ...[
                 SizedBox(height: 20),
-                Image.file(_image!, height: 100), // Display selected image
+                Image.file(_image!, height: 100),
               ],
             ],
           ),
