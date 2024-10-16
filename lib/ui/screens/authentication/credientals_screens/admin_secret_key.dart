@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-const String signUpSecretKey =
-    'IronMan'; 
-const String loginSecretKey =
-    'SuperMan'; 
+const String signUpSecretKey = 'Shopbiz-Admin';
+const String loginSecretKey = 'Shopbiz-App';
 
 Future<bool> showAdminKeyDialog(BuildContext context,
     {required bool isLogin}) async {
   final TextEditingController adminKeyController = TextEditingController();
   bool isValidKey = false;
-  String secretKey =
-      isLogin ? loginSecretKey : signUpSecretKey; 
+  String secretKey = isLogin ? loginSecretKey : signUpSecretKey;
 
   await showDialog<void>(
     context: context,
@@ -28,8 +25,8 @@ Future<bool> showAdminKeyDialog(BuildContext context,
             child: Text('Submit'),
             onPressed: () {
               if (adminKeyController.text == secretKey) {
-                isValidKey = true; 
-                Navigator.of(context).pop(); 
+                isValidKey = true;
+                Navigator.of(context).pop();
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -44,5 +41,5 @@ Future<bool> showAdminKeyDialog(BuildContext context,
     },
   );
 
-  return isValidKey; 
+  return isValidKey;
 }
