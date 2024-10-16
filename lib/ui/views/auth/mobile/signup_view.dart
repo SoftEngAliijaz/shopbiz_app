@@ -265,13 +265,6 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
                       Text('User'),
                     ],
                   ),
-                  // Add some space before the label
-                  // Expanded(
-                  //   child: Text(
-                  //     'Logging in as: ${_selectedOption == 1 ? 'Admin' : 'User'}',
-                  //     style: TextStyle(fontSize: 16),
-                  //   ),
-                  // ),
                 ],
               ),
               TextField(
