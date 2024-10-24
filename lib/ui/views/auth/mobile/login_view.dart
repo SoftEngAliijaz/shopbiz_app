@@ -137,9 +137,7 @@ class _LogInMobileViewState extends State<LogInMobileView> {
                                   Text('Admin'),
                                 ],
                               ),
-                              SizedBox(
-                                  width:
-                                      20), // Add space between the two options
+                              SizedBox(width: 20),
                               Column(
                                 children: [
                                   Radio<int>(
@@ -155,11 +153,9 @@ class _LogInMobileViewState extends State<LogInMobileView> {
                                   Text('User'),
                                 ],
                               ),
-
                               SizedBox(
                                 width: 50,
                               ),
-
                               TextButton(
                                 onPressed: () {},
                                 child: Text(

@@ -97,14 +97,6 @@ class _LogInDesktopViewState extends State<LogInDesktopView> {
                                     CheckboxMenuButton(
                                         value: true,
                                         onChanged: (v) {},
-
-                                        /// if user selected "yes"
-                                        /// it should show a field that will ask to enter a secret code that only admin knows
-                                        /// if secretCode == 'SuperMan'
-                                        /// then it will check if admin enters correct secret code it will allow to use our app
-                                        /// our app as a admin and also show Admin dashboard
-                                        /// NOTE: (Secret Code for Admin SignUp & Admin Login will be different)
-                                        /// make admin's collection separate and user's separate
                                         child: Text('Are you a admin')),
                                     CustomTextField(
                                       textEditingController:
