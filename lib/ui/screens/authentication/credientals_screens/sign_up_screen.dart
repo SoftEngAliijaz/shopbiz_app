@@ -28,13 +28,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
         body: res
             ? SignUpDesktopView(
-                emailEditingController: emailEditingController,
-                nameEditingController: nameEditingController,
-                lastNameEditingController: lastNameEditingController,
-                passwordEditingController: passwordEditingController,
+              emailEditingController: emailEditingController,
+              nameEditingController: nameEditingController,
+              passwordEditingController: passwordEditingController,
+              phoneEditingController: phoneEditingController,
+                emailController: emailEditingController,
+                passwordController1: passwordEditingController,
                 rePassEditingController: rePassEditingController,
-                phoneEditingController: phoneEditingController,
-                formKey: formKey,
+                lastNameEditingController: lastNameEditingController,
+                nameController: nameEditingController,
+                passwordController2: rePassEditingController,
+                formKey: formKey, phoneController: phoneEditingController,
               )
             : SignUpMobileView(
                 // nameController: nameEditingController,

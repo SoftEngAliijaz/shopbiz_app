@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/admin/screens/main/admin_dashboard_screen.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
-import 'package:shopbiz_app/ui/screens/app_main/home/home_screen.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/admin_secret_key.dart';
+import 'package:shopbiz_app/data/repositories/auth_repository.dart';
 import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/sign_up_screen.dart';
 import 'package:shopbiz_app/ui/widgets/app/error_dialog.dart';
 import 'package:shopbiz_app/ui/widgets/app/text_form_field.dart';
@@ -33,88 +29,6 @@ class _LogInMobileViewState extends State<LogInMobileView> {
   int _selectedOption = 2;
 
   bool get isAdmin => _selectedOption == 1;
-
-  Future<UserCredential> _performLogin(String email, String password) async {
-    return await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  Future<void> _loginCredentials(BuildContext context,
-      {required bool isAdmin}) async {
-    String email = widget.emailEditingController.text.trim();
-    String password = widget.passwordEditingController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      _showSnackBar(context, "Email and password are required.");
-      return;
-    }
-
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      _showSnackBar(context, "Please enter a valid email address.");
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      if (isAdmin) {
-        bool isKeyValid = await showAdminKeyDialog(context, isLogin: true);
-        if (!isKeyValid) {
-          _showSnackBar(context, "Invalid admin secret key. Login canceled.");
-          return;
-        }
-      }
-
-      final userCredential = await _performLogin(email, password);
-
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection(isAdmin ? "admins" : "users")
-          .doc(userCredential.user!.uid)
-          .get();
-
-      if (!userDoc.exists) {
-        _showSnackBar(context, "User does not exist.");
-        return;
-      }
-
-      _showSnackBar(context, "Login successful!");
-
-      if (isAdmin) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => AdminDashboardScreen()));
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => HomeScreen()));
-      }
-    } on FirebaseAuthException catch (e) {
-      String errorMessage;
-
-      if (e.code == 'user-not-found') {
-        errorMessage = "No user found for that email.";
-      } else if (e.code == 'wrong-password') {
-        errorMessage = "Wrong password provided.";
-      } else {
-        errorMessage = "Error: ${e.message}";
-      }
-
-      _showSnackBar(context, errorMessage);
-    } catch (e) {
-      _showSnackBar(context, "An unexpected error occurred.");
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -263,16 +177,13 @@ class _LogInMobileViewState extends State<LogInMobileView> {
                           CustomButton(
                             title: 'Login',
                             onPressed: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-
-                              await _loginCredentials(context,
-                                  isAdmin: _selectedOption == 1);
-
-                              setState(() {
-                                isLoading = false;
-                              });
+                                 bool isAdmin = _selectedOption == 1;
+                              await AuthRepository(
+                                      emailEditingController:
+                                          widget.emailEditingController,
+                                      passwordEditingController:
+                                          widget.passwordEditingController)
+                                  .loginCredentials(isAdmin: isAdmin,context);
                             },
                           ),
 
