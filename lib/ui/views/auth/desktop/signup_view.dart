@@ -10,24 +10,24 @@ import 'package:shopbiz_app/ui/widgets/auth/auth_title_text.dart';
 import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 
 class SignUpDesktopView extends StatefulWidget {
-  final TextEditingController emailEditingController;
-  final TextEditingController nameEditingController;
   final TextEditingController lastNameEditingController;
-
-  final TextEditingController passwordEditingController;
-  final TextEditingController rePassEditingController;
-  final TextEditingController phoneEditingController;
+  final TextEditingController emailController ;
+  final TextEditingController nameController;
+  final TextEditingController passwordController1 ;
+  final TextEditingController passwordController2 ;
+  final TextEditingController phoneController ;
   final GlobalKey<FormState> formKey;
 
   const SignUpDesktopView({
     super.key,
-    required this.emailEditingController,
-    required this.nameEditingController,
-    required this.lastNameEditingController,
-    required this.passwordEditingController,
-    required this.rePassEditingController,
-    required this.phoneEditingController,
-    required this.formKey,
+    required this.phoneController,
+    required this.emailController,
+  required this.lastNameEditingController,
+  required this.nameController,
+  required this.passwordController1,
+  required this.passwordController2,
+  
+    required this.formKey, required TextEditingController emailEditingController, required TextEditingController nameEditingController, required TextEditingController passwordEditingController, required TextEditingController rePassEditingController, required TextEditingController phoneEditingController,
   });
 
   @override
@@ -37,7 +37,8 @@ class SignUpDesktopView extends StatefulWidget {
 class _SignUpDesktopViewState extends State<SignUpDesktopView> {
   bool _isPasswordObscured = true;
   bool _isChecked = false;
-
+  bool get isAdmin => _selectedOption == 1;
+  int _selectedOption = 2;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -85,7 +86,7 @@ class _SignUpDesktopViewState extends State<SignUpDesktopView> {
                                           return null;
                                       },
                                       textEditingController:
-                                          widget.nameEditingController,
+                                          widget.nameController,
                                       prefixIcon: Icons.person_outline,
                                       hintText: 'First name',
                                       hintTextStyle: TextStyle(
@@ -120,7 +121,7 @@ class _SignUpDesktopViewState extends State<SignUpDesktopView> {
                                         }
                                       },
                                       textEditingController:
-                                          widget.emailEditingController,
+                                          widget.emailController,
                                       hintText: 'Enter your e-mail',
                                       prefixIcon: Icons.email_outlined,
                                       hintTextStyle: TextStyle(
@@ -150,7 +151,7 @@ class _SignUpDesktopViewState extends State<SignUpDesktopView> {
                                             : Icons.visibility_outlined),
                                       ),
                                       textEditingController:
-                                          widget.passwordEditingController,
+                                          widget.passwordController1,
                                       hintText: 'Enter your password',
                                       hintTextStyle: TextStyle(
                                           fontSize: size.width * 0.015,
@@ -181,7 +182,7 @@ class _SignUpDesktopViewState extends State<SignUpDesktopView> {
                                             : Icons.visibility_outlined),
                                       ),
                                       textEditingController:
-                                          widget.rePassEditingController,
+                                          widget.passwordController2,
                                       hintText: 'Re-enter your password',
                                       hintTextStyle: TextStyle(
                                           fontSize: size.width * 0.015,
@@ -228,8 +229,14 @@ class _SignUpDesktopViewState extends State<SignUpDesktopView> {
                                     CustomButton(
                                       title: 'Sign Up',
                                       onPressed: () async {
-                                        await AuthRepository()
-                                            .signUpFormSubmission();
+                                        bool isAdmin = _selectedOption == 1;
+                                        await AuthRepository(  emailEditingController: widget.emailController,
+                          passwordEditingController: widget.passwordController1,
+                          rePassEditingController: widget.passwordController2,
+                          phonEditingController: widget.phoneController,
+                          nameEditingController: widget.nameController)
+                                            .signUpCredentials(context,
+                                                isAdmin: isAdmin);
                                       },
                                     ),
                                     SizedBox(

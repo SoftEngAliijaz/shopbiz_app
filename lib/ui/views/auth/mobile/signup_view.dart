@@ -1,15 +1,10 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
-import 'package:shopbiz_app/data/models/user_model.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/admin_secret_key.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
+import 'package:shopbiz_app/data/repositories/auth_repository.dart';
 
 class SignUpMobileView extends StatefulWidget {
   @override
@@ -17,154 +12,29 @@ class SignUpMobileView extends StatefulWidget {
 }
 
 class _SignUpMobileViewState extends State<SignUpMobileView> {
-  bool _isObscurePassword1 = true;
-  bool _isObscurePassword2 = true;
-  bool _isLoading = false;
-  File? _image;
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController1 = TextEditingController();
   final TextEditingController passwordController2 = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
+  File? _image;
+  bool _isLoading = false;
+  bool _isObscurePassword1 = true;
+  bool _isObscurePassword2 = true;
+  int _selectedOption = 2;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController1.dispose();
+    passwordController2.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
   bool get isAdmin => _selectedOption == 1;
-  Future<void> _signUpCredentials(BuildContext context,
-      {required bool isAdmin}) async {
-    String email = emailController.text.trim();
-    String password = passwordController1.text.trim();
-    String name = nameController.text.trim();
-    String phoneNumber = phoneController.text.trim();
-
-    if (email.isEmpty ||
-        password.isEmpty ||
-        name.isEmpty ||
-        phoneNumber.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("All fields are required.")),
-      );
-      return;
-    }
-
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter a valid email address.")),
-      );
-      return;
-    }
-
-    if (password.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Password must be at least 6 characters long.")),
-      );
-      return;
-    }
-
-    int? parsedPhoneNumber = int.tryParse(phoneNumber);
-    if (parsedPhoneNumber == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter a valid phone number.")),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      if (isAdmin) {
-        bool isKeyValid = await showAdminKeyDialog(context, isLogin: false);
-        if (!isKeyValid) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text("Invalid admin secret key. Sign-up canceled.")),
-          );
-          return;
-        }
-      }
-
-      final userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      String? idToken = await userCredential.user?.getIdToken();
-
-      String? photoUrl;
-      if (_image != null) {
-        photoUrl = await _uploadImage();
-      }
-
-      UserModel userModel = UserModel(
-        uid: userCredential.user!.uid,
-        name: name,
-        email: email,
-        profilePic: photoUrl ??
-            'https://images.pexels.com/photos/35537/child-children-girl-happy.jpg',
-        phoneNumber: parsedPhoneNumber,
-        isAdmin: isAdmin,
-      );
-
-      String collectionName = isAdmin ? "admins" : "users";
-
-      await FirebaseFirestore.instance
-          .collection(collectionName)
-          .doc(userCredential.user!.uid)
-          .set({
-        ...userModel.toMap(),
-        'idToken': idToken,
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Sign-up successful!")),
-      );
-
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => LogInScreen()));
-    } on FirebaseAuthException catch (e) {
-      String errorMessage;
-
-      if (e.code == 'email-already-in-use') {
-        errorMessage =
-            "This email address is already in use. Please try another one.";
-      } else {
-        errorMessage = "Error: ${e.message}";
-      }
-
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(errorMessage)));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("An unexpected error occurred.")));
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<String?> _uploadImage() async {
-    if (_image == null) return null;
-
-    try {
-      Reference ref = FirebaseStorage.instance
-          .ref()
-          .child('user_profile_pictures')
-          .child('${emailController.text.trim()}_profile_picture.jpg');
-
-      UploadTask uploadTask = ref.putFile(_image!);
-
-      await uploadTask;
-
-      String downloadUrl = await ref.getDownloadURL();
-
-      return downloadUrl;
-    } catch (e) {
-      print("Error uploading image: $e");
-      return null;
-    }
-  }
 
   Future<void> _getImage() async {
     final ImagePicker _picker = ImagePicker();
@@ -179,7 +49,6 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
     }
   }
 
-  int _selectedOption = 2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,7 +153,16 @@ class _SignUpMobileViewState extends State<SignUpMobileView> {
                 onPressed: () {
                   bool isAdmin = _selectedOption == 1;
 
-                  _signUpCredentials(context, isAdmin: isAdmin);
+                  AuthRepository(
+                          emailEditingController: emailController,
+                          passwordEditingController: passwordController1,
+                          rePassEditingController: passwordController2,
+                          phonEditingController: phoneController,
+                          nameEditingController: nameController,)
+                      .signUpCredentials(
+                    context,
+                    isAdmin: isAdmin,
+                  );
                 },
                 child:
                     _isLoading ? CircularProgressIndicator() : Text("Sign Up"),

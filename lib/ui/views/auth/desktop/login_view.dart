@@ -30,6 +30,9 @@ class LogInDesktopView extends StatefulWidget {
 class _LogInDesktopViewState extends State<LogInDesktopView> {
   bool _isPasswordObscured = true;
   bool _isChecked = false;
+    int _selectedOption = 2;
+
+  bool get isAdmin => _selectedOption == 1;
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +175,9 @@ class _LogInDesktopViewState extends State<LogInDesktopView> {
                                     CustomButton(
                                       title: 'Login',
                                       onPressed: () async {
-                                        AuthRepository().loginFormSubmission();
+                                        AuthRepository().loginCredentials(
+                                            context,
+                                            isAdmin: isAdmin);
                                       },
                                     ),
                                     SizedBox(height: size.height * 0.01),
