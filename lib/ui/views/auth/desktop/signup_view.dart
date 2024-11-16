@@ -10,35 +10,41 @@ import 'package:shopbiz_app/ui/widgets/auth/auth_title_text.dart';
 import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 
 class SignUpDesktopView extends StatefulWidget {
-  final TextEditingController lastNameEditingController;
-  final TextEditingController emailController ;
-  final TextEditingController nameController;
-  final TextEditingController passwordController1 ;
-  final TextEditingController passwordController2 ;
-  final TextEditingController phoneController ;
-  final GlobalKey<FormState> formKey;
-
   const SignUpDesktopView({
     super.key,
     required this.phoneController,
     required this.emailController,
-  required this.lastNameEditingController,
-  required this.nameController,
-  required this.passwordController1,
-  required this.passwordController2,
-  
-    required this.formKey, required TextEditingController emailEditingController, required TextEditingController nameEditingController, required TextEditingController passwordEditingController, required TextEditingController rePassEditingController, required TextEditingController phoneEditingController,
+    required this.lastNameEditingController,
+    required this.nameController,
+    required this.passwordController1,
+    required this.passwordController2,
+    required this.formKey,
+    required TextEditingController emailEditingController,
+    required TextEditingController nameEditingController,
+    required TextEditingController passwordEditingController,
+    required TextEditingController rePassEditingController,
+    required TextEditingController phoneEditingController,
   });
+
+  final TextEditingController emailController;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController lastNameEditingController;
+  final TextEditingController nameController;
+  final TextEditingController passwordController1;
+  final TextEditingController passwordController2;
+  final TextEditingController phoneController;
 
   @override
   State<SignUpDesktopView> createState() => _SignUpDesktopViewState();
 }
 
 class _SignUpDesktopViewState extends State<SignUpDesktopView> {
-  bool _isPasswordObscured = true;
   bool _isChecked = false;
-  bool get isAdmin => _selectedOption == 1;
+  bool _isPasswordObscured = true;
   int _selectedOption = 2;
+
+  bool get isAdmin => _selectedOption == 1;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -230,11 +236,17 @@ class _SignUpDesktopViewState extends State<SignUpDesktopView> {
                                       title: 'Sign Up',
                                       onPressed: () async {
                                         bool isAdmin = _selectedOption == 1;
-                                        await AuthRepository(  emailEditingController: widget.emailController,
-                          passwordEditingController: widget.passwordController1,
-                          rePassEditingController: widget.passwordController2,
-                          phonEditingController: widget.phoneController,
-                          nameEditingController: widget.nameController)
+                                        await AuthRepository(
+                                                emailEditingController:
+                                                    widget.emailController,
+                                                passwordEditingController:
+                                                    widget.passwordController1,
+                                                rePassEditingController:
+                                                    widget.passwordController2,
+                                                phonEditingController:
+                                                    widget.phoneController,
+                                                nameEditingController:
+                                                    widget.nameController)
                                             .signUpCredentials(context,
                                                 isAdmin: isAdmin);
                                       },

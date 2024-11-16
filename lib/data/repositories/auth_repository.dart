@@ -22,14 +22,14 @@ class AuthRepository {
     this.image,
   });
 
-  final formKey;
-  final TextEditingController? emailEditingController;
-  final TextEditingController? passwordEditingController;
-  final TextEditingController? rePassEditingController;
-  final TextEditingController? phonEditingController;
-  final TextEditingController? nameEditingController;
   final BuildContext? context;
+  final TextEditingController? emailEditingController;
+  final formKey;
   File? image;
+  final TextEditingController? nameEditingController;
+  final TextEditingController? passwordEditingController;
+  final TextEditingController? phonEditingController;
+  final TextEditingController? rePassEditingController;
 
   Future<void> signUpCredentials(BuildContext context,
       {required bool isAdmin}) async {
@@ -164,31 +164,15 @@ class AuthRepository {
     }
   }
 
-  
-// login function
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  Future<UserCredential> _performLogin(String email, String password) async {
-    
-    return await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-  }
-
   Future<void> loginCredentials(BuildContext context,
       {required bool isAdmin}) async {
-        if (emailEditingController == null || passwordEditingController == null) {
-    _showSnackBar(context, "Email and password fields are not initialized.");
-    return;
-  }
+    if (emailEditingController == null || passwordEditingController == null) {
+      _showSnackBar(context, "Email and password fields are not initialized.");
+      return;
+    }
     String email = emailEditingController!.text.trim();
 
-    String password = passwordEditingController!.text.trim() ;
+    String password = passwordEditingController!.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       _showSnackBar(context, "Email and password are required.");
@@ -253,5 +237,19 @@ class AuthRepository {
         const SnackBar(content: Text('Reset link sent!')),
       );
     }
+  }
+
+// login function
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<UserCredential> _performLogin(String email, String password) async {
+    return await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 }

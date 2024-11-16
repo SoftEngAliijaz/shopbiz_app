@@ -10,11 +10,6 @@ import 'package:shopbiz_app/ui/widgets/auth/auth_title_text.dart';
 import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 
 class LogInDesktopView extends StatefulWidget {
-  final TextEditingController emailEditingController;
-  final TextEditingController passwordEditingController;
-  final GlobalKey<FormState> formKey;
-  final void Function()? onPressed;
-
   const LogInDesktopView({
     super.key,
     required this.emailEditingController,
@@ -23,14 +18,19 @@ class LogInDesktopView extends StatefulWidget {
     required this.onPressed,
   });
 
+  final void Function()? onPressed;
+  final TextEditingController emailEditingController;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController passwordEditingController;
+
   @override
   State<LogInDesktopView> createState() => _LogInDesktopViewState();
 }
 
 class _LogInDesktopViewState extends State<LogInDesktopView> {
-  bool _isPasswordObscured = true;
   bool _isChecked = false;
-    int _selectedOption = 2;
+  bool _isPasswordObscured = true;
+  int _selectedOption = 2;
 
   bool get isAdmin => _selectedOption == 1;
 

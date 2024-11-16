@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/ui/widgets/admin/user_info_card.dart';
-import 'package:shopbiz_app/ui/widgets/app/carousel_slider_widget.dart';
+import 'package:shopbiz_app/ui/widgets/app/carousel_slider.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});

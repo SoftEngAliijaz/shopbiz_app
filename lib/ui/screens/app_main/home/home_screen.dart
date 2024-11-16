@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/data/models/product_ui_model.dart';
 import 'package:shopbiz_app/ui/widgets/admin/user_info_card.dart';
-import 'package:shopbiz_app/ui/widgets/app/carousel_slider_widget.dart';
+import 'package:shopbiz_app/ui/widgets/app/carousel_slider.dart';
 import 'package:shopbiz_app/ui/widgets/app/user_drawer.dart';
 import 'package:shopbiz_app/ui/widgets/products/product_card.dart';
 import 'package:shopbiz_app/ui/widgets/products/product_card_title.dart';

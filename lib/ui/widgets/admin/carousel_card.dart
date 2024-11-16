@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
 
 class CarouselCardWidget extends StatelessWidget {
-  final String title;
-  final String image;
-
   const CarouselCardWidget({
     super.key,
     required this.title,
     required this.image,
   });
+
+  final String image;
+  final String title;
 
   @override
   Widget build(BuildContext context) {

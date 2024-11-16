@@ -8,10 +8,6 @@ import 'package:shopbiz_app/ui/widgets/auth/auth_circle_div.dart';
 import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 
 class LogInMobileView extends StatefulWidget {
-  final TextEditingController emailEditingController;
-  final TextEditingController passwordEditingController;
-  final GlobalKey<FormState> formKey;
-
   const LogInMobileView({
     super.key,
     required this.emailEditingController,
@@ -19,13 +15,18 @@ class LogInMobileView extends StatefulWidget {
     required this.formKey,
   });
 
+  final TextEditingController emailEditingController;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController passwordEditingController;
+
   @override
   State<LogInMobileView> createState() => _LogInMobileViewState();
 }
 
 class _LogInMobileViewState extends State<LogInMobileView> {
-  bool _isPasswordObscured = true;
   bool isLoading = false;
+
+  bool _isPasswordObscured = true;
   int _selectedOption = 2;
 
   bool get isAdmin => _selectedOption == 1;
@@ -177,13 +178,13 @@ class _LogInMobileViewState extends State<LogInMobileView> {
                           CustomButton(
                             title: 'Login',
                             onPressed: () async {
-                                 bool isAdmin = _selectedOption == 1;
+                              bool isAdmin = _selectedOption == 1;
                               await AuthRepository(
                                       emailEditingController:
                                           widget.emailEditingController,
                                       passwordEditingController:
                                           widget.passwordEditingController)
-                                  .loginCredentials(isAdmin: isAdmin,context);
+                                  .loginCredentials(isAdmin: isAdmin, context);
                             },
                           ),
 

@@ -4,10 +4,10 @@ import 'package:shopbiz_app/admin/screens/users/user_details.dart';
 import 'package:shopbiz_app/data/models/user_ui_model.dart';
 
 class UsersDataTableSource extends DataTableSource {
-  final List<UserUIModel> users;
-  final BuildContext context;
-
   UsersDataTableSource(this.users, this.context);
+
+  final BuildContext context;
+  final List<UserUIModel> users;
 
   @override
   DataRow? getRow(int index) {
