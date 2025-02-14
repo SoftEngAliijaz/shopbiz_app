@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
 import 'package:shopbiz_app/core/routes/app_routes.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
+import 'package:shopbiz_app/ui/screens/authentication/log_in_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +32,4 @@ class MyApp extends StatelessWidget {
         routes: AppRoutes.routes,
         home: const LogInScreen());
   }
-  // hello this  is it 
-  
 }

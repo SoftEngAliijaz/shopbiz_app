@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
+import 'package:shopbiz_app/ui/screens/authentication/log_in_screen.dart';
 
 class UserDrawer extends StatelessWidget {
   const UserDrawer({super.key});

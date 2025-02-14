@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:shopbiz_app/admin/screens/main/admin_dashboard_screen.dart';
 import 'package:shopbiz_app/data/models/user_model.dart';
 import 'package:shopbiz_app/ui/screens/app_main/home/home_screen.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/admin_secret_key.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/log_in_screen.dart';
+import 'package:shopbiz_app/ui/screens/authentication/admin_secret_key.dart';
+import 'package:shopbiz_app/ui/screens/authentication/log_in_screen.dart';
 
 class AuthRepository {
   AuthRepository({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
 import 'package:shopbiz_app/data/repositories/auth_repository.dart';
-import 'package:shopbiz_app/ui/screens/authentication/credientals_screens/sign_up_screen.dart';
+import 'package:shopbiz_app/ui/screens/authentication/sign_up_screen.dart';
 import 'package:shopbiz_app/ui/widgets/app/error_dialog.dart';
 import 'package:shopbiz_app/ui/widgets/app/text_form_field.dart';
 import 'package:shopbiz_app/ui/widgets/auth/auth_circle_div.dart';
