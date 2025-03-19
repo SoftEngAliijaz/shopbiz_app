@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/ui/screens/app_main/home/home_screen.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:shopbiz_app/ui/screens/app/home/home_screen.dart';
 import 'package:shopbiz_app/ui/views/auth/desktop/login_view.dart';
 import 'package:shopbiz_app/ui/views/auth/mobile/login_view.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -38,9 +38,8 @@ class _LogInScreenState extends State<LogInScreen> {
                 },
               )
             : LogInMobileView(
-                emailEditingController: emailEditingController,
-                passwordEditingController: passwordEditingController,
                 formKey: formKey,
-              ));
+                emailEditingController: emailEditingController,
+                passwordEditingController: passwordEditingController));
   }
 }

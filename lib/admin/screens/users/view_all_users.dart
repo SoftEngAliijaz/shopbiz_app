@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shopbiz_app/core/constants/app_colors.dart';
 import 'package:shopbiz_app/core/constants/app_constants.dart';
 import 'package:shopbiz_app/data/data_source/user_table_data_source.dart';
-import 'package:shopbiz_app/data/models/user_ui_model.dart';
+import 'package:shopbiz_app/data/models/ui_models/user_ui_model.dart';
 import 'package:http/http.dart' as http;
 
 class ViewAllUsersScreen extends StatefulWidget {

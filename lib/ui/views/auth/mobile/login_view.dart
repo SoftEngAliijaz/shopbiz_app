@@ -10,13 +10,13 @@ import 'package:shopbiz_app/ui/widgets/auth/custom_button.dart';
 class LogInMobileView extends StatefulWidget {
   const LogInMobileView({
     super.key,
+    required this.formKey,
     required this.emailEditingController,
     required this.passwordEditingController,
-    required this.formKey,
   });
 
-  final TextEditingController emailEditingController;
   final GlobalKey<FormState> formKey;
+  final TextEditingController emailEditingController;
   final TextEditingController passwordEditingController;
 
   @override

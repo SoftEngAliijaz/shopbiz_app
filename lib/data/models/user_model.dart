@@ -5,7 +5,7 @@ class UserModel {
     required this.uid,
     required this.name,
     required this.email,
-    required this.profilePic,
+    required this.avatar,
     required this.phoneNumber,
     this.isAdmin = false,
   });
@@ -18,7 +18,7 @@ class UserModel {
       uid: map['uid'],
       name: map['name'],
       email: map['email'],
-      profilePic: map['profilePic'],
+      avatar: map['avatar'],
       phoneNumber: map['phoneNumber'],
       isAdmin: map['isAdmin'] ?? false,
     );
@@ -28,7 +28,7 @@ class UserModel {
   final bool isAdmin;
   String name;
   int phoneNumber;
-  String profilePic;
+  String avatar;
   String uid;
 
   Map<String, dynamic> toMap() {
@@ -36,7 +36,7 @@ class UserModel {
       'uid': uid,
       'name': name,
       'email': email,
-      'profilePic': profilePic,
+      'avatar': avatar,
       'phoneNumber': phoneNumber,
       'isAdmin': isAdmin,
     };

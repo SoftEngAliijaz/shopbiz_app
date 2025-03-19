@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopbiz_app/data/models/carousel_model.dart';
+import 'package:shopbiz_app/data/models/ui_models/carousel_model.dart';
 import 'package:shopbiz_app/ui/widgets/admin/carousel_card.dart';
 
 class CarouselSliderWidget extends StatelessWidget {
