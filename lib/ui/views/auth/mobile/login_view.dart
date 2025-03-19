@@ -13,11 +13,13 @@ class LogInMobileView extends StatefulWidget {
     required this.formKey,
     required this.emailEditingController,
     required this.passwordEditingController,
+    required this.onPressed,
   });
 
   final GlobalKey<FormState> formKey;
   final TextEditingController emailEditingController;
   final TextEditingController passwordEditingController;
+  final void Function()? onPressed;
 
   @override
   State<LogInMobileView> createState() => _LogInMobileViewState();

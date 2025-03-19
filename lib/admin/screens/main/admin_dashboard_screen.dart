@@ -9,6 +9,36 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Admin Dashboard'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+            ),
+          ],
+        ),
+      ),
       body: SizedBox(
         height: size.height,
         width: size.width,
@@ -30,22 +60,104 @@ class AdminDashboardScreen extends StatelessWidget {
                       crossAxisCount: 2,
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0),
-                  children: const [
+                  children: [
                     Card(
-                        color: Colors.red,
-                        child: Center(child: Text('Total Orders [Count]'))),
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.shopping_cart,
+                                size: 40, color: Colors.white),
+                            SizedBox(height: 10),
+                            Text(
+                              'Total Orders [Count]',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     Card(
-                        color: Colors.green,
-                        child: Center(child: Text('Total Cash [Count]'))),
+                      color: Colors.green,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.attach_money,
+                                size: 40, color: Colors.white),
+                            SizedBox(height: 10),
+                            Text(
+                              'Total Cash [Count]',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     Card(
-                        color: Colors.blue,
-                        child: Center(child: Text('Will be added soon'))),
+                      color: Colors.blue,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.update, size: 40, color: Colors.white),
+                            SizedBox(height: 10),
+                            Text(
+                              'Will be added soon',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     Card(
-                        color: Colors.amber,
-                        child: Center(child: Text('Will be added soon'))),
+                      color: Colors.amber,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.update, size: 40, color: Colors.white),
+                            SizedBox(height: 10),
+                            Text(
+                              'Will be added soon',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     Card(
-                        color: Colors.pinkAccent,
-                        child: Center(child: Text('Will be added soon'))),
+                      color: Colors.pinkAccent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.update, size: 40, color: Colors.white),
+                            SizedBox(height: 10),
+                            Text(
+                              'Will be added soon',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

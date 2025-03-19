@@ -24,11 +24,11 @@ class UserModel {
     );
   }
 
+  String avatar;
   String email;
   final bool isAdmin;
   String name;
   int phoneNumber;
-  String avatar;
   String uid;
 
   Map<String, dynamic> toMap() {

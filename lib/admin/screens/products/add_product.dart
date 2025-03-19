@@ -63,13 +63,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Product'),
+      ),
       body: SizedBox(
         height: size.height,
         width: size.width,
         child: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            padding: const EdgeInsets.all(10.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -82,81 +84,94 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.production_quantity_limits_outlined,
-                    hintText: 'Please Enter Your Product Name',
-                    textEditingController: nameController,
-                  ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.description_outlined,
-                    hintText: 'Please Enter Your Product Description',
-                    textEditingController: descriptionController,
-                  ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.numbers_outlined,
-                    hintText: 'Please Enter Your Product Quantity',
-                    textEditingController: quantityController,
-                    keyboardType: TextInputType.number,
-                  ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.branding_watermark_outlined,
-                    hintText: 'Please Enter Your Product Brand',
-                    textEditingController: brandController,
-                  ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.auto_fix_high_outlined,
-                    hintText: 'Please Enter Your Product Condition',
-                    textEditingController: conditionController,
-                  ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.category_outlined,
-                    hintText: 'Please Enter Your Product Category',
-                    textEditingController: categoryController,
-                  ),
-                  CheckboxListTile(
-                    title: const Text('Is Product on SALE?'),
-                    value: isOnSale,
-                    onChanged: (v) {
-                      setState(() {
-                        isOnSale = v ?? false;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text('Is Product on Discount?'),
-                    value: isOnDiscount,
-                    onChanged: (v) {
-                      setState(() {
-                        isOnDiscount = v ?? false;
-                      });
-                    },
-                  ),
-                  CustomTextField(
-                    validator: (v) => v == null || v.isEmpty
-                        ? "This Field Cannot be Empty"
-                        : null,
-                    prefixIcon: Icons.price_change_outlined,
-                    hintText: 'Please Enter Your Product Price',
-                    textEditingController: priceController,
-                    keyboardType: TextInputType.number,
+                  const SizedBox(height: 10.0),
+                  Card(
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon:
+                                Icons.production_quantity_limits_outlined,
+                            hintText: 'Please Enter Your Product Name',
+                            textEditingController: nameController,
+                          ),
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon: Icons.description_outlined,
+                            hintText: 'Please Enter Your Product Description',
+                            textEditingController: descriptionController,
+                          ),
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon: Icons.numbers_outlined,
+                            hintText: 'Please Enter Your Product Quantity',
+                            textEditingController: quantityController,
+                            keyboardType: TextInputType.number,
+                          ),
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon: Icons.branding_watermark_outlined,
+                            hintText: 'Please Enter Your Product Brand',
+                            textEditingController: brandController,
+                          ),
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon: Icons.auto_fix_high_outlined,
+                            hintText: 'Please Enter Your Product Condition',
+                            textEditingController: conditionController,
+                          ),
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon: Icons.category_outlined,
+                            hintText: 'Please Enter Your Product Category',
+                            textEditingController: categoryController,
+                          ),
+                          const Divider(),
+                          CheckboxListTile(
+                            title: const Text('Is Product on SALE?'),
+                            value: isOnSale,
+                            onChanged: (v) {
+                              setState(() {
+                                isOnSale = v ?? false;
+                              });
+                            },
+                          ),
+                          CheckboxListTile(
+                            title: const Text('Is Product on Discount?'),
+                            value: isOnDiscount,
+                            onChanged: (v) {
+                              setState(() {
+                                isOnDiscount = v ?? false;
+                              });
+                            },
+                          ),
+                          CustomTextField(
+                            validator: (v) => v == null || v.isEmpty
+                                ? "This Field Cannot be Empty"
+                                : null,
+                            prefixIcon: Icons.price_change_outlined,
+                            hintText: 'Please Enter Your Product Price',
+                            textEditingController: priceController,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   CustomButton(

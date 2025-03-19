@@ -4,19 +4,14 @@ import 'package:shopbiz_app/core/constants/app_colors.dart';
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
-//
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      // App Bar
       appBar: AppBar(
         centerTitle: true,
-        // foregroundColor: AppColors.kWhiteColor,
         title: const Text('Privacy Policy'),
-
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -28,38 +23,45 @@ class PrivacyPolicyScreen extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Container(
           color: AppColors.kWhiteColor,
+          padding: const EdgeInsets.all(10.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Last Update : 17/8/2024',
-                      ),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.03,
-                    ),
-                    const Text(
-                        'Shopbiz  is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile grocery app.'),
-                    SizedBox(
-                      height: screenHeight * 0.05,
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Privacy Policy',
-                        style: TextStyle(
-                            color: AppColors.kPrimaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenWidth * 0.04),
-                      ),
-                    ),
-                    const Text(textAlign: TextAlign.left, '''
+              const Text(
+                'Last Update : 17/8/2024',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: size.height * 0.03),
+              const Text(
+                'Shopbiz is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile grocery app.',
+                textAlign: TextAlign.justify,
+              ),
+              SizedBox(height: size.height * 0.05),
+              Text(
+                'Privacy Policy',
+                style: TextStyle(
+                  color: AppColors.kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: size.width * 0.04,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const PrivacyPolicyText(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
+class PrivacyPolicyText extends StatelessWidget {
+  const PrivacyPolicyText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      '''
 We may collect personal information such as your name, email address, phone number, delivery address, and payment details when you register or place an order. We may also collect location data (with your permission) to offer location-based services, such as delivery tracking, and information about your device and how you interact with the app.
 
 We use this information to provide services such as order processing and delivery, improve your experience, send you updates and promotions, and ensure app security. Your information may be shared with third-party service providers (e.g., payment processors, delivery services) but will not be sold or traded to third parties. We may also disclose your information if required by law.
@@ -74,17 +76,8 @@ If you have any questions or concerns about this Privacy Policy, please contact 
 
 Email: grocerystore@gmail.com
 Address: Lahore, Pakistan
-            
-            - Email: grocerystore@gmail.com  
-            - Address: Lahore Pakistan 
-            ''')
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      ''',
+      textAlign: TextAlign.justify,
     );
   }
 }

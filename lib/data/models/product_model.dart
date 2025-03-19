@@ -1,16 +1,4 @@
 class ProductModel {
-  final String id;
-  final String name;
-  final String imageUrl;
-  final String description;
-  final int quantity;
-  final String brand;
-  final String condition;
-  final String category;
-  final bool isOnSale;
-  final bool isDiscountAvailable;
-  final double price;
-
   ProductModel({
     required this.id,
     required this.name,
@@ -40,6 +28,18 @@ class ProductModel {
       price: json['price'],
     );
   }
+
+  final String brand;
+  final String category;
+  final String condition;
+  final String description;
+  final String id;
+  final String imageUrl;
+  final bool isDiscountAvailable;
+  final bool isOnSale;
+  final String name;
+  final double price;
+  final int quantity;
 
   Map<String, dynamic> toJson() {
     return {

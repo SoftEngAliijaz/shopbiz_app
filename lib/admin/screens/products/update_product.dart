@@ -26,47 +26,56 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     final TextEditingController priceController = TextEditingController();
 
     return Scaffold(
-      body: SizedBox(
-        height: size.height,
-        width: size.width,
+      appBar: AppBar(
+        title: const Text('Update Product'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ListTile(
-                leading: Icon(Icons.arrow_forward_outlined),
-                title: Text(
-                  'Update Products',
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                ),
+              const Text(
+                'Update Product Details',
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
+              const SizedBox(height: 20.0),
               CustomTextField(
                   prefixIcon: Icons.numbers_outlined,
                   hintText: 'ID',
                   textEditingController: idController),
+              const SizedBox(height: 10.0),
               CustomTextField(
                   prefixIcon: Icons.production_quantity_limits_outlined,
-                  hintText: 'Please Enter Your Product Name',
+                  hintText: 'Product Name',
                   textEditingController: nameController),
+              const SizedBox(height: 10.0),
               CustomTextField(
                   prefixIcon: Icons.description_outlined,
-                  hintText: 'Please Enter Your Product Description',
+                  hintText: 'Product Description',
                   textEditingController: descriptionController),
+              const SizedBox(height: 10.0),
               CustomTextField(
                   prefixIcon: Icons.numbers_outlined,
-                  hintText: 'Please Enter Your Product Quantity',
+                  hintText: 'Product Quantity',
                   textEditingController: quantityController),
+              const SizedBox(height: 10.0),
               CustomTextField(
                   prefixIcon: Icons.branding_watermark_outlined,
-                  hintText: 'Please Enter Your Product Brand',
+                  hintText: 'Product Brand',
                   textEditingController: brandController),
+              const SizedBox(height: 10.0),
               CustomTextField(
                   prefixIcon: Icons.auto_fix_high_outlined,
-                  hintText: 'Please Enter Your Product Condition',
+                  hintText: 'Product Condition',
                   textEditingController: conditionController),
+              const SizedBox(height: 10.0),
               CustomTextField(
                   prefixIcon: Icons.category_outlined,
-                  hintText: 'Please Enter Your Product Category',
+                  hintText: 'Product Category',
                   textEditingController: categoryController),
+              const SizedBox(height: 10.0),
               CheckboxListTile(
                   title: const Text('Is Product on SALE?'),
                   value: isOnSale,
@@ -85,12 +94,14 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   }),
               CustomTextField(
                   prefixIcon: Icons.price_change_outlined,
-                  hintText: 'Please Enter Your Product Price',
+                  hintText: 'Product Price',
                   textEditingController: priceController),
               const SizedBox(height: 20.0),
-              CustomButton(
-                title: 'Update/Save Product',
-                onPressed: () {},
+              Center(
+                child: CustomButton(
+                  title: 'Update/Save Product',
+                  onPressed: () {},
+                ),
               ),
               const SizedBox(height: 20.0),
             ],

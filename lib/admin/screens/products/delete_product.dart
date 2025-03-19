@@ -8,14 +8,26 @@ class DeleteProductScreen extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Delete Products'),
+      ),
       body: SizedBox(
         height: size.height,
         width: size.width,
         child: ListView.builder(
+          padding: const EdgeInsets.all(8.0),
           itemCount: 50,
           itemBuilder: (BuildContext context, int index) {
-            return const Card(
-              child: Text('Delete Items'),
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: Text('Product ${index + 1}'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_forever, color: Colors.red),
+                  onPressed: () {},
+                ),
+              ),
             );
           },
         ),
